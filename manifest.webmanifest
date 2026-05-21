@@ -1,7 +1,7 @@
 {
-  "name": "מאיה · כוורת מילים עברית",
-  "short_name": "מאיה",
-  "description": "כוורת מילים עברית לילדים, מותאמת למסך בית באייפד.",
+  "name": "כרם · משחק מילים עברי",
+  "short_name": "כרם",
+  "description": "משחק מילים עברי לילדים עם אשכולות ענבים וגפנים, מותאם למסך בית באייפד.",
   "id": "./index.html",
   "start_url": "./index.html",
   "scope": "./",
@@ -9,8 +9,8 @@
   "orientation": "any",
   "dir": "rtl",
   "lang": "he",
-  "background_color": "#fff8d9",
-  "theme_color": "#ffcc33",
+  "background_color": "#f2ffe3",
+  "theme_color": "#6f3acb",
   "icons": [
     { "src": "icon-180.png", "sizes": "180x180", "type": "image/png", "purpose": "any" },
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },

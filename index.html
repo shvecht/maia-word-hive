@@ -3,31 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#ffcc33" />
-  <meta name="application-name" content="מאיה" />
+  <meta name="theme-color" content="#6f3acb" />
+  <meta name="application-name" content="כרם" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="מאיה" />
+  <meta name="apple-mobile-web-app-title" content="כרם" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png" />
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
-  <title>מאיה · כוורת מילים עברית</title>
+  <title>כרם · משחק מילים עברי</title>
   <style>
     :root {
-      --bg1: #fff8d9;
-      --bg2: #ffe6fb;
-      --bg3: #dbf7ff;
-      --ink: #221a35;
-      --muted: #6d6379;
-      --card: rgba(255,255,255,.78);
+      --bg1: #f2ffe3;
+      --bg2: #f1e3ff;
+      --bg3: #dcfff0;
+      --ink: #231331;
+      --muted: #695d75;
+      --card: rgba(255,255,255,.80);
       --card-solid: #ffffff;
-      --honey: #ffd42a;
-      --honey-dark: #f5a400;
-      --berry: #ff4fa3;
-      --mint: #2ed6a3;
-      --sky: #52b7ff;
-      --grape: #8565ff;
+      --honey: #9b5de5;
+      --honey-dark: #5a189a;
+      --berry: #d946ef;
+      --mint: #2fbf71;
+      --sky: #4cc9f0;
+      --grape: #6f3acb;
       --danger: #ff4b6e;
       --good: #20b970;
       --shadow: 0 18px 55px rgba(60, 32, 90, .18);
@@ -48,9 +48,9 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Hebrew", Arial, sans-serif;
       overflow: hidden;
       background:
-        radial-gradient(circle at 8% 8%, rgba(255, 79, 163, .20), transparent 32rem),
-        radial-gradient(circle at 92% 14%, rgba(82, 183, 255, .26), transparent 34rem),
-        radial-gradient(circle at 46% 95%, rgba(46, 214, 163, .22), transparent 34rem),
+        radial-gradient(circle at 8% 8%, rgba(111, 58, 203, .22), transparent 32rem),
+        radial-gradient(circle at 92% 14%, rgba(47, 191, 113, .25), transparent 34rem),
+        radial-gradient(circle at 46% 95%, rgba(76, 201, 240, .18), transparent 34rem),
         linear-gradient(135deg, var(--bg1), var(--bg2) 48%, var(--bg3));
     }
 
@@ -101,9 +101,25 @@
       animation: drift 14s ease-in-out infinite alternate;
     }
 
-    .blob.one { background: #ff75bf; inset-inline-start: -90px; top: 120px; }
-    .blob.two { background: #50ccff; inset-inline-end: -110px; top: 38px; animation-delay: -4s; }
-    .blob.three { background: #7ef0bb; inset-inline-start: 40%; bottom: -160px; animation-delay: -8s; }
+    .sky-candy::before,
+    .sky-candy::after {
+      content: "";
+      position: absolute;
+      width: min(72vw, 780px);
+      height: min(24vw, 250px);
+      border: 6px solid transparent;
+      border-top-color: rgba(40, 132, 73, .28);
+      border-radius: 50%;
+      filter: blur(.2px);
+      transform: rotate(-10deg);
+    }
+
+    .sky-candy::before { inset-inline-start: -12vw; top: 18%; }
+    .sky-candy::after { inset-inline-end: -16vw; bottom: 12%; transform: rotate(172deg); }
+
+    .blob.one { background: #8f57e8; inset-inline-start: -90px; top: 120px; }
+    .blob.two { background: #38d27e; inset-inline-end: -110px; top: 38px; animation-delay: -4s; }
+    .blob.three { background: #7ddcff; inset-inline-start: 40%; bottom: -160px; animation-delay: -8s; }
 
     .floaties span {
       position: absolute;
@@ -152,8 +168,8 @@
       border-radius: 22px;
       display: grid;
       place-items: center;
-      background: linear-gradient(145deg, #ffe45a, #ffad2f);
-      box-shadow: 0 16px 32px rgba(245, 164, 0, .28), inset 0 -5px 0 rgba(0,0,0,.08);
+      background: linear-gradient(145deg, #dfffa3, #8f57e8 56%, #4b1377);
+      box-shadow: 0 16px 32px rgba(90, 24, 154, .26), inset 0 -5px 0 rgba(0,0,0,.10);
       font-size: 34px;
       animation: logoWiggle 5s ease-in-out infinite;
     }
@@ -205,9 +221,9 @@
     }
 
     .pill-button:active { transform: translateY(2px) scale(.98); }
-    .pill-button.primary { background: linear-gradient(135deg, #ffe763, #ffb130); }
-    .pill-button.good { background: linear-gradient(135deg, #87ffd0, #32d999); }
-    .pill-button.pink { background: linear-gradient(135deg, #ffc1e2, #ff65b1); color: #371525; }
+    .pill-button.primary { background: linear-gradient(135deg, #dfffa3, #54d37f); }
+    .pill-button.good { background: linear-gradient(135deg, #d9c4ff, #8f57e8); color: #231331; }
+    .pill-button.pink { background: linear-gradient(135deg, #ffd0eb, #d946ef); color: #371525; }
     .pill-button[disabled] { opacity: .58; cursor: progress; filter: grayscale(.12); }
 
     .select-wrap {
@@ -309,7 +325,7 @@
       border-radius: 50%;
       display: grid;
       place-items: center;
-      background: conic-gradient(from 180deg, #ffcf2e var(--pct, 0%), rgba(255,255,255,.66) 0);
+      background: conic-gradient(from 180deg, #7c3aed var(--pct, 0%), rgba(255,255,255,.66) 0);
       box-shadow: inset 0 -8px 0 rgba(0,0,0,.06), var(--soft-shadow);
       position: relative;
     }
@@ -318,7 +334,7 @@
       content: "";
       position: absolute;
       inset: 9px;
-      background: #fff9de;
+      background: #f7fff0;
       border-radius: 50%;
       box-shadow: inset 0 0 0 1px rgba(0,0,0,.05);
     }
@@ -366,8 +382,8 @@
     .found-toggle.open,
     .found-toggle:active {
       transform: translateY(1px) scale(.98);
-      background: #fff5c6;
-      box-shadow: var(--soft-shadow), 0 0 0 4px rgba(255, 212, 42, .18);
+      background: #efffce;
+      box-shadow: var(--soft-shadow), 0 0 0 4px rgba(95, 199, 112, .18);
     }
 
     .progress-panel {
@@ -391,7 +407,7 @@
       height: 100%;
       width: 0%;
       border-radius: inherit;
-      background: linear-gradient(90deg, #ffbd27, #ff4fa3, #8565ff);
+      background: linear-gradient(90deg, #55c96f, #8f57e8, #d946ef);
       transition: width .48s cubic-bezier(.2,.8,.15,1.2);
       position: relative;
     }
@@ -508,7 +524,7 @@
 
     .gesture-layer polyline {
       fill: none;
-      stroke: rgba(255, 79, 163, .78);
+      stroke: rgba(84, 211, 127, .78);
       stroke-width: 13;
       stroke-linecap: round;
       stroke-linejoin: round;
@@ -532,6 +548,30 @@
       z-index: -1;
     }
 
+    .hive-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 13% 18%;
+      border-radius: 44%;
+      border: 5px solid rgba(49, 134, 76, .18);
+      border-inline-color: transparent;
+      transform: rotate(-18deg);
+      z-index: -1;
+    }
+
+    .hive-wrap::after {
+      content: "";
+      position: absolute;
+      inset-inline-start: 19%;
+      top: 18%;
+      width: 62%;
+      height: 58%;
+      border-radius: 50%;
+      border-top: 4px solid rgba(49, 134, 76, .24);
+      transform: rotate(24deg);
+      z-index: -1;
+    }
+
     @keyframes pulseGlow {
       0%, 100% { transform: scale(.95); opacity: .74; }
       50% { transform: scale(1.06); opacity: 1; }
@@ -545,22 +585,51 @@
       width: var(--tap);
       aspect-ratio: 1.12 / 1;
       clip-path: polygon(25% 3%, 75% 3%, 100% 50%, 75% 97%, 25% 97%, 0 50%);
-      background: rgba(255,255,255,.86);
-      box-shadow: 0 13px 24px rgba(60, 32, 90, .15), inset 0 -8px 0 rgba(0,0,0,.06);
+      background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(240,255,232,.88));
+      box-shadow: 0 13px 24px rgba(60, 32, 90, .15), inset 0 -8px 0 rgba(62, 31, 84, .08);
       display: grid;
       place-items: center;
       font-size: clamp(30px, 8vw, 58px);
       font-weight: 1000;
+      color: #25113a;
+      text-shadow: 0 2px 0 rgba(255,255,255,.72);
       transition: transform .18s cubic-bezier(.2,.8,.15,1.25), filter .18s ease, box-shadow .18s ease;
       user-select: none;
       z-index: 4;
     }
 
+    .tile::before {
+      content: "";
+      position: absolute;
+      inset: 8%;
+      clip-path: inherit;
+      opacity: .76;
+      background:
+        radial-gradient(circle at 43% 24%, rgba(191, 147, 255, .95) 0 12%, transparent 13%),
+        radial-gradient(circle at 58% 35%, rgba(137, 76, 207, .95) 0 13%, transparent 14%),
+        radial-gradient(circle at 35% 43%, rgba(162, 92, 222, .95) 0 14%, transparent 15%),
+        radial-gradient(circle at 52% 53%, rgba(111, 58, 203, .95) 0 14%, transparent 15%),
+        radial-gradient(circle at 67% 58%, rgba(126, 71, 189, .88) 0 12%, transparent 13%),
+        radial-gradient(circle at 45% 70%, rgba(91, 36, 155, .90) 0 13%, transparent 14%),
+        linear-gradient(140deg, rgba(255,255,255,.72), rgba(230,255,226,.52));
+    }
+
     .tile.center {
-      background: linear-gradient(145deg, #fff174, #ffb623);
-      color: #281b00;
-      box-shadow: 0 16px 34px rgba(245,164,0,.38), inset 0 -9px 0 rgba(0,0,0,.09);
+      background: linear-gradient(145deg, #e6ff91, #5ed46f);
+      color: #172100;
+      box-shadow: 0 16px 34px rgba(62, 152, 74, .34), inset 0 -9px 0 rgba(0,0,0,.09);
       animation: centerHum 2.8s ease-in-out infinite;
+    }
+
+    .tile.center::before {
+      background:
+        radial-gradient(circle at 42% 24%, rgba(235, 255, 157, .96) 0 12%, transparent 13%),
+        radial-gradient(circle at 58% 35%, rgba(165, 224, 74, .94) 0 13%, transparent 14%),
+        radial-gradient(circle at 35% 43%, rgba(199, 242, 103, .94) 0 14%, transparent 15%),
+        radial-gradient(circle at 52% 53%, rgba(113, 196, 58, .94) 0 14%, transparent 15%),
+        radial-gradient(circle at 67% 58%, rgba(89, 169, 59, .84) 0 12%, transparent 13%),
+        radial-gradient(circle at 45% 70%, rgba(54, 132, 54, .78) 0 13%, transparent 14%),
+        linear-gradient(140deg, rgba(255,255,255,.68), rgba(223,255,194,.48));
     }
 
     @keyframes centerHum {
@@ -590,7 +659,7 @@
       inset-inline-start: 50%;
       top: 2px;
       font-size: .45em;
-      color: #ff4fa3;
+      color: #8f57e8;
       animation: sparkFly .55s ease forwards;
     }
 
@@ -619,7 +688,7 @@
     }
 
     .control-btn.enter {
-      background: linear-gradient(135deg, #ffe25a, #ff9d2e);
+      background: linear-gradient(135deg, #dfffa3, #54d37f);
       min-width: 118px;
     }
 
@@ -683,14 +752,15 @@
     .word-chip {
       border-radius: 999px;
       padding: 8px 12px;
-      background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,248,211,.95));
+      background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(241,231,255,.95));
       box-shadow: inset 0 -3px 0 rgba(0,0,0,.05), 0 8px 18px rgba(60,32,90,.10);
       font-weight: 1000;
       animation: chipIn .38s cubic-bezier(.2,.8,.15,1.3);
     }
 
     .word-chip.golden {
-      background: linear-gradient(135deg, #fff36d, #ffc12e 55%, #ff8e35);
+      background: linear-gradient(135deg, #e6ff91, #8f57e8 55%, #4b1377);
+      color: #1f102b;
     }
 
     @keyframes chipIn {
@@ -1154,7 +1224,7 @@
     <div class="blob one"></div>
     <div class="blob two"></div>
     <div class="blob three"></div>
-    <div class="floaties"><span>🐝</span><span>🌈</span><span>🍯</span><span>✨</span></div>
+    <div class="floaties"><span>🍇</span><span>🌿</span><span>🍃</span><span>✨</span></div>
   </div>
 
   <canvas id="confetti"></canvas>
@@ -1162,10 +1232,10 @@
   <main class="app-shell">
     <header class="topbar">
       <div class="brand">
-        <div class="logo" aria-hidden="true">🐝</div>
+        <div class="logo" aria-hidden="true">🍇</div>
         <div>
-          <h1>מאיה</h1>
-          <div class="tagline">כוורת מילים עברית, לילדים עם אצבעות זריזות ודמיון רעב</div>
+          <h1>כרם</h1>
+          <div class="tagline">משחק מילים עברי עם אשכולות ענבים וגפנים מתפתלות</div>
         </div>
       </div>
       <div class="top-actions">
@@ -1186,7 +1256,7 @@
           <div>
             <div class="level-title">
               <strong id="levelName">שלב</strong>
-              <span class="badge" id="levelEmoji">🍯</span>
+              <span class="badge" id="levelEmoji">🍇</span>
               <span class="badge" id="pangramBadge">מילת זהב: 0</span>
             </div>
           </div>
@@ -1228,7 +1298,7 @@
           <button class="control-btn shuffle" id="shuffleBtn" type="button" aria-label="ערבוב אותיות">↻</button>
           <button class="control-btn enter" id="enterBtn" type="button">קדימה</button>
         </div>
-        <div class="mini-kbd" aria-hidden="true">אפשר ללחוץ, להקליד, או להחליק אצבע בין האותיות. בהרמת האצבע מאיה בודקת את המילה.</div>
+        <div class="mini-kbd" aria-hidden="true">אפשר ללחוץ, להקליד, או להחליק אצבע בין האותיות. בהרמת האצבע כרם בודק את המילה.</div>
       </article>
 
       <button class="side-scrim" id="sideScrim" type="button" aria-label="סגירת מילים ורמזים"></button>
@@ -1239,7 +1309,7 @@
           <button class="side-close" id="sideCloseBtn" type="button" aria-label="סגירת מילים ורמזים">×</button>
         </div>
         <div class="words-cloud" id="wordsCloud">
-          <div class="empty-list">עוד אין מילים. הכוורת מחכה לבאזז הראשון.</div>
+          <div class="empty-list">עוד אין מילים. הכרם מחכה לאשכול הראשון.</div>
         </div>
 
         <div class="hint-box">
@@ -1260,11 +1330,11 @@
             <span class="corpus-dot loading" id="corpusDot" aria-label="טוען"></span>
           </div>
           <p id="corpusStatus">טוענת קורפוס עברי...</p>
-          <small id="corpusMeta">כשיש רשת, מאיה מושכת רשימת מילים גדולה ומייצרת שלבים חדשים לבד.</small>
+          <small id="corpusMeta">כשיש רשת, כרם מושך רשימת מילים גדולה ומייצר שלבים חדשים לבד.</small>
         </div>
 
         <div class="family-note">
-          כל מילה צריכה לכלול את האות הזהובה. מותר להשתמש באותה אות שוב ושוב. כפתור ״שלב קורפוס״ יוצר לוח אקראי מתוך רשימת מילים עברית, וב״עורך להורים״ אפשר להוסיף שלבים משלכם תוך שתי דקות.
+          כל מילה צריכה לכלול את האות המרכזית. מותר להשתמש באותה אות שוב ושוב. כפתור ״שלב קורפוס״ יוצר לוח אקראי מתוך רשימת מילים עברית, וב״עורך להורים״ אפשר להוסיף שלבים משלכם תוך שתי דקות.
         </div>
       </aside>
     </section>
@@ -1278,17 +1348,17 @@
         <h2 id="helpTitle">איך משחקים?</h2>
         <button class="close-btn" type="button" data-close="helpModal" aria-label="סגירה">×</button>
       </div>
-      <p>מאיה היא כוורת מילים עברית קטנה ונוצצת: לוחצים או מחליקים אצבע בין אותיות, בונים מילים, ואוספים דבש מילולי.</p>
+      <p>כרם הוא משחק מילים עברי קטן ונוצץ: לוחצים או מחליקים אצבע בין אותיות, בונים מילים, ואוספים אשכולות מילים.</p>
       <ul class="rules-list">
-        <li>המילה חייבת לכלול את האות הצהובה שבמרכז.</li>
+        <li>המילה חייבת לכלול את האות הירוקה שבמרכז.</li>
         <li>אפשר להשתמש באותה אות כמה פעמים שרוצים, גם במסלול החלקה שחוזר לאותה משבצת.</li>
         <li>ברוב השלבים המילים הן באורך 3 אותיות ומעלה.</li>
-        <li>מילה שמשתמשת בכל שבע האותיות היא מילת זהב ומקבלת בונוס.</li>
+        <li>מילה שמשתמשת בכל שבע האותיות היא אשכול זהב ומקבלת בונוס.</li>
         <li>כפתור ״שלב קורפוס״ יוצר שלב אקראי מתוך רשימת מילים עברית גדולה. אם אין רשת, יש מיני קורפוס מקומי לגיבוי.</li>
         <li>אותיות סופיות עובדות לבד: לחיצה על מ בסוף מילה תוצג כ־ם, נ תהפוך ל־ן וכן הלאה.</li>
       </ul>
       <div class="modal-actions">
-        <button class="pill-button primary" type="button" data-close="helpModal">יאללה, דבש</button>
+        <button class="pill-button primary" type="button" data-close="helpModal">יאללה, לכרם</button>
       </div>
     </div>
   </div>
@@ -1330,11 +1400,11 @@
         <h2 id="editorTitle">עורך שלבים להורים</h2>
         <button class="close-btn" type="button" data-close="editorModal" aria-label="סגירה">×</button>
       </div>
-      <p>בחרו אות מרכזית, שש אותיות מסביב, ורשימת מילים מופרדת ברווחים או בשורות. מאיה תבדוק שהמילים עומדות בכללים ותשמור את השלב במכשיר.</p>
+      <p>בחרו אות מרכזית, שש אותיות מסביב, ורשימת מילים מופרדת ברווחים או בשורות. כרם יבדוק שהמילים עומדות בכללים וישמור את השלב במכשיר.</p>
       <div class="form-grid">
         <div class="field">
           <label for="editName">שם השלב</label>
-          <input id="editName" value="שלב של מאיה" />
+          <input id="editName" value="שלב של כרם" />
         </div>
         <div class="field">
           <label for="editEmoji">אימוג׳י</label>
@@ -1354,7 +1424,7 @@
         </div>
         <div class="field">
           <label for="editTheme">צבע מצב רוח</label>
-          <select id="editTheme"><option value="honey">דבש</option><option value="berry">ורוד</option><option value="mint">מנטה</option><option value="sky">שמיים</option></select>
+          <select id="editTheme"><option value="honey">ענבים</option><option value="berry">ורוד</option><option value="mint">עלים</option><option value="sky">שמיים</option></select>
         </div>
         <div class="field full">
           <label for="editWords">מילים לשלב</label>
@@ -1380,6 +1450,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=4"></script>
+  <script src="script.js?v=5"></script>
 </body>
 </html>

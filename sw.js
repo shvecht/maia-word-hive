@@ -1,9 +1,9 @@
-const CACHE_NAME = 'maya-word-hive-v4';
+const CACHE_NAME = 'kerem-vines-v5';
 const ASSETS = [
   './',
   './index.html',
   './script.js',
-  './script.js?v=4',
+  './script.js?v=5',
   './manifest.webmanifest',
   './icon.svg',
   './icon-180.png',

@@ -22,7 +22,7 @@
 
   const DEFAULT_PUZZLES = [
     {
-      id: 'honey-letters', name: 'מילים בדבש', emoji: '🍯', center: 'מ', letters: ['א','י','ד','ל','ה','ר'], minLength: 3, theme: 'honey',
+      id: 'honey-letters', name: 'מילים בכרם', emoji: '🍇', center: 'מ', letters: ['א','י','ד','ל','ה','ר'], minLength: 3, theme: 'honey',
       words: ['אמא','אימא','מים','מילה','מילים','מידה','מדד','מרד','למד','מלמד','מלא','רמה','אדמה','למה','מראה','דממה','המים']
     },
     {
@@ -76,20 +76,20 @@
   `;
 
   const THEME_GRADIENTS = {
-    honey: ['#ffe763', '#ffb130'],
-    berry: ['#ffc1e2', '#ff65b1'],
-    mint: ['#92ffd7', '#2ed6a3'],
-    sky: ['#aee8ff', '#52b7ff']
+    honey: ['#d9c4ff', '#6f3acb'],
+    berry: ['#ffd0eb', '#d946ef'],
+    mint: ['#dfffa3', '#2fbf71'],
+    sky: ['#d8f5ff', '#4cc9f0']
   };
 
   const RANKS = [
     { pct: 0, name: 'ניצוץ ראשון' },
-    { pct: .12, name: 'טיפת דבש' },
-    { pct: .25, name: 'דבורה חרוצה' },
-    { pct: .42, name: 'שומר/ת הכוורת' },
+    { pct: .12, name: 'ענב ראשון' },
+    { pct: .25, name: 'מטפס/ת גפנים' },
+    { pct: .42, name: 'שומר/ת הכרם' },
     { pct: .60, name: 'אלוף/ת המילים' },
-    { pct: .78, name: 'מכשף/ת אותיות' },
-    { pct: .94, name: 'מלכות הדבש' }
+    { pct: .78, name: 'קוסם/ת אותיות' },
+    { pct: .94, name: 'מלכות האשכולות' }
   ];
 
   const els = {
@@ -365,7 +365,7 @@
     window.addEventListener('resize', resizeCanvas);
     window.addEventListener('resize', updateGestureLine);
     loadCorpus(false).catch(() => {});
-    setTimeout(() => toast('ברוכים הבאים לכוורת של מאיה 🐝', 'gold'), 360);
+    setTimeout(() => toast('ברוכים הבאים לכרם 🍇', 'gold'), 360);
   }
 
   function seedFallbackCorpus() {
@@ -404,7 +404,7 @@
   function renderPuzzle() {
     els.levelName.textContent = currentPuzzle.name;
     els.levelEmoji.textContent = currentPuzzle.emoji;
-    els.pangramBadge.textContent = `מילות זהב: ${currentPuzzle.words.filter(w => isPangram(w, currentPuzzle)).length}`;
+    els.pangramBadge.textContent = `אשכולות זהב: ${currentPuzzle.words.filter(w => isPangram(w, currentPuzzle)).length}`;
     const tiles = [...els.hiveWrap.querySelectorAll('.tile')];
     tiles[0].textContent = currentPuzzle.center;
     tiles[0].dataset.letter = currentPuzzle.center;
@@ -456,7 +456,7 @@
     if (!found.length) {
       const empty = document.createElement('div');
       empty.className = 'empty-list';
-      empty.textContent = 'עוד אין מילים. הכוורת מחכה לבאזז הראשון.';
+      empty.textContent = 'עוד אין מילים. הכרם מחכה לאשכול הראשון.';
       els.wordsCloud.appendChild(empty);
       return;
     }
@@ -483,7 +483,7 @@
     if (!remaining.length) {
       const row = document.createElement('div');
       row.className = 'hint-row';
-      row.textContent = 'כל המילים נמצאו. הכוורת מצדיעה.';
+      row.textContent = 'כל המילים נמצאו. הכרם מלא אשכולות.';
       els.hintGrid.appendChild(row);
       return;
     }
@@ -527,7 +527,7 @@
     currentLetters = shuffleArray(currentLetters);
     renderPuzzle();
     blip(260, .08, 'square');
-    toast('ערבבתי את האותיות. עכשיו הן נראות אשמות.', 'gold');
+    toast('ערבבתי את האותיות. עכשיו הן כמו גפנים מתפתלות.', 'gold');
   }
 
   function submitWord() {
@@ -539,7 +539,7 @@
     if (!word) return toast('צריך קודם לבנות מילה.', 'bad');
     if (word.length < currentPuzzle.minLength) return fail(`קצר מדי. צריך לפחות ${currentPuzzle.minLength} אותיות.`);
     if (!word.includes(currentPuzzle.center)) return fail(`חסרה האות הזהובה ${currentPuzzle.center}. היא קצת דיווה.`);
-    if (![...word].every(ch => allowed.has(ch))) return fail('יש במילה אות שלא גרה בכוורת הזאת.');
+    if (![...word].every(ch => allowed.has(ch))) return fail('יש במילה אות שלא גדלה בכרם הזה.');
     if (ps.found.includes(word)) return fail(`${pretty} כבר ברשימה.`);
     if (!currentPuzzle.words.includes(word)) return fail(`${pretty} לא נמצאת ברשימת השלב. אפשר להוסיף אותה בעורך.`);
 
@@ -554,9 +554,9 @@
     makeParticles(gold ? 'זהב!' : `+${score}`, gold);
     blip(gold ? 740 : 620, .13, 'sine');
     if (gold || isLevelComplete()) launchConfetti(gold ? 110 : 170);
-    toast(gold ? `מילת זהב: ${pretty}!` : `יפה! ${pretty} שווה ${score} נקודות`, gold ? 'gold' : 'good');
+    toast(gold ? `אשכול זהב: ${pretty}!` : `יפה! ${pretty} שווה ${score} נקודות`, gold ? 'gold' : 'good');
     if (isLevelComplete()) {
-      window.setTimeout(() => toast('כל המילים נמצאו. מאיה עושה גלגלון דבש.', 'gold'), 500);
+      window.setTimeout(() => toast('כל המילים נמצאו. הכרם מלא אשכולות.', 'gold'), 500);
     }
   }
 
@@ -601,7 +601,7 @@
     const ps = getPuzzleState(currentPuzzle.id);
     const foundSet = new Set(ps.found || []);
     const remaining = currentPuzzle.words.filter(w => !foundSet.has(w));
-    if (!remaining.length) return toast('אין מה לרמוז. ניצחתם את הכוורת.', 'good');
+    if (!remaining.length) return toast('אין מה לרמוז. ניצחתם את הכרם.', 'good');
     const word = remaining[Math.floor(Math.random() * remaining.length)];
     ps.hints = (ps.hints || 0) + 1;
     saveState();
@@ -650,11 +650,11 @@
     for (let i = 0; i < amount; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
-      p.textContent = i === 0 ? text : (gold ? '✦' : ['🍯','✨','🐝'][i % 3]);
+      p.textContent = i === 0 ? text : (gold ? '✦' : ['🍇','✨','🌿'][i % 3]);
       p.style.left = `${centerX + (Math.random() - .5) * 120}px`;
       p.style.top = `${centerY + (Math.random() - .5) * 40}px`;
       p.style.setProperty('--dx', `${(Math.random() - .5) * 160}px`);
-      p.style.color = gold ? '#f59e00' : ['#ff4fa3','#8565ff','#20b970'][i % 3];
+      p.style.color = gold ? '#6f3acb' : ['#d946ef','#8565ff','#20b970'][i % 3];
       document.body.appendChild(p);
       window.setTimeout(() => p.remove(), 850);
     }
@@ -765,7 +765,7 @@
     try {
       localStorage.setItem(CORPUS_CACHE_KEY, JSON.stringify({ ts: Date.now(), words }));
     } catch {
-      // The game works without a cache. Some browsers are tiny pantry goblins.
+      // The game works without a cache if storage is full.
     }
   }
 
@@ -841,7 +841,7 @@
     updateCorpusButton();
     const puzzle = buildRandomPuzzleFromCorpus();
     if (!puzzle) {
-      const fallback = preparePuzzle({ ...randomItem(DEFAULT_PUZZLES), id: `random-safe-${Date.now()}`, name: 'כוורת אקראית קטנה', generated: true, source: 'fallback' });
+      const fallback = preparePuzzle({ ...randomItem(DEFAULT_PUZZLES), id: `random-safe-${Date.now()}`, name: 'כרם אקראי קטן', generated: true, source: 'fallback' });
       saveGeneratedPuzzle(fallback);
       rebuildPuzzleList();
       renderLevelSelect();
@@ -867,7 +867,7 @@
     const minLength = 3;
     const idealCount = 32;
     const themes = Object.keys(THEME_GRADIENTS);
-    const emojis = ['🧬','🌈','🍯','✨','🐝','🪄','🎲','🌻','🚀','🦄','🍓','🧁'];
+    const emojis = ['🧬','🌈','🍇','🌿','🍃','✨','🪄','🎲','🌻','🍓','🧁'];
     const seenMasks = new Set();
     let best = null;
     const tries = Math.min(520, Math.max(220, Math.floor(seeds.length / 8)));
@@ -917,7 +917,7 @@
     const label = corpus.source === 'remote' ? 'קורפוס' : (corpus.source === 'cache' ? 'מטמון' : 'מקומי');
     return preparePuzzle({
       id: `corpus-${now}-${best.center}-${best.mask}`,
-      name: `כוורת ${label}`,
+      name: `כרם ${label}`,
       emoji: randomItem(emojis),
       center: best.center,
       letters,
@@ -1111,7 +1111,7 @@
     renderProgress();
     renderFoundWords();
     renderHintTable();
-    toast('השלב אופס. דף נקי, דבורה חדשה.', 'gold');
+    toast('השלב אופס. דף נקי, גפן חדשה.', 'gold');
     closeModal('settingsModal');
   }
 
@@ -1134,7 +1134,7 @@
     const words = els.editWords.value.split(/[\s,;،]+/).map(sanitizeWord).filter(Boolean);
     return preparePuzzle({
       id: `custom-${Date.now()}`,
-      name: els.editName.value.trim() || 'שלב של מאיה',
+      name: els.editName.value.trim() || 'שלב של כרם',
       emoji: els.editEmoji.value.trim() || '✨',
       center,
       letters,
@@ -1165,7 +1165,7 @@
     renderLevelSelect();
     closeModal('editorModal');
     loadPuzzle(puzzle.id);
-    toast('השלב נשמר ונכנס לכוורת.', 'good');
+    toast('השלב נשמר ונכנס לכרם.', 'good');
   }
 
   function deleteCustomPuzzles() {
