@@ -1,9 +1,9 @@
-const CACHE_NAME = 'kerem-vines-v5';
+const CACHE_NAME = 'kerem-vines-v8';
 const ASSETS = [
   './',
   './index.html',
   './script.js',
-  './script.js?v=5',
+  './script.js?v=7',
   './manifest.webmanifest',
   './icon.svg',
   './icon-180.png',

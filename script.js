@@ -364,6 +364,7 @@
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
     window.addEventListener('resize', updateGestureLine);
+    window.addEventListener('resize', syncSidePanelStyles);
     loadCorpus(false).catch(() => {});
     setTimeout(() => toast('ברוכים הבאים לכרם 🍇', 'gold'), 360);
   }
@@ -628,10 +629,26 @@
     els.sideScrim.classList.toggle('open', sidePanelOpen);
     els.foundToggleBtn.classList.toggle('open', sidePanelOpen);
     els.foundToggleBtn.setAttribute('aria-expanded', String(sidePanelOpen));
+    syncSidePanelStyles();
   }
 
   function toggleSidePanel() {
     setSidePanelOpen(!sidePanelOpen);
+  }
+
+  function syncSidePanelStyles() {
+    const drawerMode = window.matchMedia('(max-width: 920px)').matches;
+    if (!drawerMode) {
+      els.sideCard.style.transform = '';
+      els.sideCard.style.bottom = '';
+      els.sideCard.style.opacity = '';
+      els.sideCard.style.pointerEvents = '';
+      return;
+    }
+    els.sideCard.style.transform = 'none';
+    els.sideCard.style.bottom = sidePanelOpen ? 'calc(14px + var(--safe-bottom))' : 'calc(-70svh - 28px)';
+    els.sideCard.style.opacity = sidePanelOpen ? '1' : '0';
+    els.sideCard.style.pointerEvents = sidePanelOpen ? 'auto' : 'none';
   }
 
   function toast(message, type = '') {

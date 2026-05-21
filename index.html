@@ -1081,17 +1081,19 @@
       .side-card {
         position: fixed;
         z-index: 32;
-        inset: auto clamp(12px, 3vw, 30px) calc(14px + var(--safe-bottom));
+        inset-inline: clamp(12px, 3vw, 30px);
+        bottom: calc(-70svh - 28px);
         height: min(62svh, 560px);
         max-height: calc(100svh - 112px - var(--safe-top) - var(--safe-bottom));
-        transform: translateY(calc(100% + 28px));
+        transform: none;
         opacity: 0;
         pointer-events: none;
-        transition: transform .22s ease, opacity .18s ease;
+        transition: bottom .22s ease, opacity .18s ease;
       }
       .side-card.open {
-        transform: translateY(0);
-        opacity: 1;
+        bottom: calc(14px + var(--safe-bottom)) !important;
+        transform: none !important;
+        opacity: 1 !important;
         pointer-events: auto;
       }
       .side-scrim.open {
@@ -1450,6 +1452,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=5"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>
