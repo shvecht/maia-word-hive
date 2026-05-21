@@ -63,6 +63,93 @@
     }
   ];
 
+  const SENTENCE_PUZZLES = [
+    {
+      id: 'sentence-dad-strawberry-home',
+      name: 'אבא ותות בבית',
+      emoji: '🍓',
+      center: 'ת',
+      letters: ['א','ב','ה','ו','י','פ'],
+      minLength: 3,
+      theme: 'berry',
+      mode: 'sentence',
+      requiresCenter: false,
+      targetWords: ['אבא','אוהב','תות','יפה','בית'],
+      sentenceTokens: [{ target: 'אבא' }, { target: 'אוהב' }, { target: 'תות' }, { target: 'יפה' }, { prefix: 'ב', target: 'בית' }],
+      art: { src: 'assets/sentence-art/dad-strawberry-home.svg', alt: 'אבא עם תות בבית' }
+    },
+    {
+      id: 'sentence-dad-green-strawberry',
+      name: 'קוראים על תות',
+      emoji: '📖',
+      center: 'ת',
+      letters: ['א','ב','ו','י','ק','ר'],
+      minLength: 3,
+      theme: 'mint',
+      mode: 'sentence',
+      requiresCenter: false,
+      targetWords: ['אבא','קורא','תות','ירוק','בית'],
+      sentenceTokens: [{ target: 'אבא' }, { target: 'קורא' }, { text: 'על' }, { target: 'תות' }, { target: 'ירוק' }, { prefix: 'ב', target: 'בית' }],
+      art: { src: 'assets/sentence-art/dad-green-strawberry.svg', alt: 'אבא קורא על תות ירוק בבית' }
+    },
+    {
+      id: 'sentence-mom-sweet-strawberry-sea',
+      name: 'אימא בים',
+      emoji: '🌊',
+      center: 'ת',
+      letters: ['א','ו','י','מ','ק','ר'],
+      minLength: 3,
+      theme: 'sky',
+      mode: 'sentence',
+      requiresCenter: false,
+      targetWords: ['אימא','קוראת','תות','מתוק'],
+      sentenceTokens: [{ target: 'אימא' }, { target: 'קוראת' }, { text: 'על' }, { target: 'תות' }, { target: 'מתוק' }, { text: 'בים' }],
+      art: { src: 'assets/sentence-art/mom-sweet-strawberry-sea.svg', alt: 'אימא קוראת על תות מתוק בים' }
+    },
+    {
+      id: 'sentence-baby-strawberry-nap',
+      name: 'תינוק ותות',
+      emoji: '🍼',
+      center: 'ת',
+      letters: ['ו','י','מ','נ','ק','ש'],
+      minLength: 3,
+      theme: 'honey',
+      mode: 'sentence',
+      requiresCenter: false,
+      targetWords: ['תינוק','ישן','תות','מתוק'],
+      sentenceTokens: [{ target: 'תינוק' }, { target: 'ישן' }, { text: 'עם' }, { target: 'תות' }, { target: 'מתוק' }, { text: 'בים' }],
+      art: { src: 'assets/sentence-art/baby-strawberry-nap.svg', alt: 'תינוק ישן עם תות מתוק בים' }
+    },
+    {
+      id: 'sentence-boy-pink-horse',
+      name: 'סוס ורוד רוקד',
+      emoji: '🎠',
+      center: 'ד',
+      letters: ['ו','י','ל','ס','ק','ר'],
+      minLength: 3,
+      theme: 'berry',
+      mode: 'sentence',
+      requiresCenter: false,
+      targetWords: ['ילד','רוקד','סוס','ורוד'],
+      sentenceTokens: [{ target: 'ילד' }, { target: 'רוקד' }, { text: 'עם' }, { target: 'סוס' }, { target: 'ורוד' }],
+      art: { src: 'assets/sentence-art/boy-pink-horse.svg', alt: 'ילד רוקד עם סוס ורוד' }
+    },
+    {
+      id: 'sentence-girl-banana-field',
+      name: 'בננה בשדה',
+      emoji: '🌾',
+      center: 'ה',
+      letters: ['ב','ד','י','ל','נ','ש'],
+      minLength: 3,
+      theme: 'mint',
+      mode: 'sentence',
+      requiresCenter: false,
+      targetWords: ['ילדה','ישנה','בננה','שדה'],
+      sentenceTokens: [{ target: 'ילדה' }, { target: 'ישנה' }, { text: 'ליד' }, { target: 'בננה' }, { prefix: 'ב', target: 'שדה' }],
+      art: { src: 'assets/sentence-art/girl-banana-field.svg', alt: 'ילדה ישנה ליד בננה בשדה' }
+    }
+  ];
+
   const FALLBACK_CORPUS_TEXT = `
     אבא אמא אימא אח אחות אור אוכל אופניים ארון אריה אדמה אהבה אוהב אויר אילן אלון ארנב אש אשכול
     בית בלון בננה ברווז ברק בוקר בובה בקבוק בריכה ברית בגד בגדים גן גינה גשם גביע גמל גמד גשר דבש דג דגל דלת
@@ -109,6 +196,9 @@
     foundText: document.getElementById('foundText'),
     foundToggleBtn: document.getElementById('foundToggleBtn'),
     foundToggleCount: document.getElementById('foundToggleCount'),
+    sentenceScene: document.getElementById('sentenceScene'),
+    sentenceArt: document.getElementById('sentenceArt'),
+    sentencePhrase: document.getElementById('sentencePhrase'),
     currentWord: document.getElementById('currentWord'),
     gameCard: document.getElementById('gameCard'),
     sideCard: document.getElementById('sideCard'),
@@ -256,15 +346,76 @@
     return uniqueLetters >= 2 && uniqueLetters <= 7;
   }
 
+  function isSentencePuzzle(puzzle) {
+    return puzzle && puzzle.mode === 'sentence';
+  }
+
+  function normalizeSentenceTokens(tokens) {
+    return (tokens || []).map(token => {
+      if (typeof token === 'string') return { text: token };
+      const target = sanitizeWord(token.target);
+      if (target) return { target, prefix: String(token.prefix || '') };
+      const text = String(token.text || '').trim();
+      return text ? { text } : null;
+    }).filter(Boolean);
+  }
+
+  function extractSentenceTargets(tokens) {
+    return unique(normalizeSentenceTokens(tokens).map(token => token.target).filter(Boolean));
+  }
+
+  function wordFitsPuzzle(word, puzzle) {
+    if (!word || word.length < puzzle.minLength) return false;
+    const allowed = new Set([puzzle.center, ...puzzle.letters]);
+    if (![...word].every(ch => allowed.has(ch))) return false;
+    return !puzzle.requiresCenter || word.includes(puzzle.center);
+  }
+
+  function sortWords(words) {
+    return unique(words).sort((a, b) => a.length - b.length || toFinalDisplay(a).localeCompare(toFinalDisplay(b), 'he'));
+  }
+
+  function completionWords(puzzle) {
+    return isSentencePuzzle(puzzle) ? puzzle.targetWords : puzzle.words;
+  }
+
+  function foundCompletionWords(puzzle, found) {
+    const targetSet = new Set(completionWords(puzzle));
+    return (found || []).filter(word => targetSet.has(word));
+  }
+
+  function isTargetWord(word, puzzle) {
+    return new Set(completionWords(puzzle)).has(word);
+  }
+
+  function hydrateSentenceWords(puzzle) {
+    if (!isSentencePuzzle(puzzle)) return puzzle;
+    const sourceWords = corpus.ready ? corpus.words : [];
+    const bonusWords = sourceWords.filter(word => wordFitsPuzzle(word, puzzle));
+    puzzle.words = sortWords(puzzle.targetWords.concat(bonusWords));
+    return puzzle;
+  }
+
+  function hydrateSentencePuzzlesFromCorpus() {
+    if (!puzzles.length) return;
+    puzzles.forEach(hydrateSentenceWords);
+    if (isSentencePuzzle(currentPuzzle)) {
+      hydrateSentenceWords(currentPuzzle);
+      renderProgress();
+      renderFoundWords();
+      renderHintTable();
+    }
+  }
+
   function preparePuzzle(raw, custom = false) {
     const center = normalizeLetter(raw.center);
     const letters = unique((raw.letters || []).map(normalizeLetter)).filter(l => l !== center).slice(0, 6);
     const minLength = Number(raw.minLength || 3);
-    const allowed = new Set([center, ...letters]);
-    const words = unique((raw.words || []).map(sanitizeWord))
-      .filter(w => w.length >= minLength && w.includes(center) && [...w].every(ch => allowed.has(ch)))
-      .sort((a, b) => a.length - b.length || toFinalDisplay(a).localeCompare(toFinalDisplay(b), 'he'));
-    return {
+    const mode = raw.mode === 'sentence' ? 'sentence' : 'classic';
+    const requiresCenter = raw.requiresCenter === undefined ? mode !== 'sentence' : !!raw.requiresCenter;
+    const sentenceTokens = normalizeSentenceTokens(raw.sentenceTokens || []);
+    const rawTargets = (raw.targetWords && raw.targetWords.length) ? raw.targetWords : extractSentenceTargets(sentenceTokens);
+    const prepared = {
       id: raw.id || `custom-${Date.now()}`,
       name: raw.name || 'שלב בלי שם',
       emoji: raw.emoji || '✨',
@@ -272,11 +423,20 @@
       letters,
       minLength,
       theme: raw.theme || 'honey',
-      words,
+      words: [],
       custom,
       generated: !!raw.generated,
-      source: raw.source || ''
+      source: raw.source || '',
+      mode,
+      requiresCenter,
+      sentenceTokens,
+      targetWords: sortWords(unique(rawTargets.map(sanitizeWord))),
+      art: raw.art || null
     };
+    prepared.targetWords = prepared.targetWords.filter(w => wordFitsPuzzle(w, prepared));
+    prepared.words = sortWords(unique((raw.words || []).map(sanitizeWord).concat(prepared.targetWords)).filter(w => wordFitsPuzzle(w, prepared)));
+    hydrateSentenceWords(prepared);
+    return prepared;
   }
 
   function loadCustomPuzzles() {
@@ -312,7 +472,7 @@
   function rebuildPuzzleList() {
     const generated = loadGeneratedPuzzles();
     const custom = loadCustomPuzzles();
-    puzzles = DEFAULT_PUZZLES.map(p => preparePuzzle(p)).concat(generated, custom);
+    puzzles = DEFAULT_PUZZLES.map(p => preparePuzzle(p)).concat(SENTENCE_PUZZLES.map(p => preparePuzzle(p)), generated, custom);
   }
 
   function loadState() {
@@ -370,7 +530,8 @@
   }
 
   function seedFallbackCorpus() {
-    const words = DEFAULT_PUZZLES.flatMap(puzzle => puzzle.words).concat(FALLBACK_CORPUS_TEXT.split(/\s+/));
+    const sentenceTargets = SENTENCE_PUZZLES.flatMap(puzzle => puzzle.targetWords || []);
+    const words = DEFAULT_PUZZLES.flatMap(puzzle => puzzle.words).concat(sentenceTargets, FALLBACK_CORPUS_TEXT.split(/\s+/));
     setCorpusWords(words, 'fallback', 'מיני קורפוס מקומי', true);
   }
 
@@ -379,7 +540,7 @@
     puzzles.forEach(puzzle => {
       const opt = document.createElement('option');
       opt.value = puzzle.id;
-      const tag = puzzle.custom ? ' · שלי' : (puzzle.generated ? ' · קורפוס' : '');
+      const tag = puzzle.custom ? ' · שלי' : (puzzle.generated ? ' · קורפוס' : (isSentencePuzzle(puzzle) ? ' · משפט' : ''));
       opt.textContent = `${puzzle.emoji} ${puzzle.name}${tag}`;
       els.levelSelect.appendChild(opt);
     });
@@ -396,6 +557,7 @@
     setTheme(currentPuzzle.theme);
     clearGesture(true);
     renderPuzzle();
+    renderSentenceScene();
     renderProgress();
     renderFoundWords();
     renderHintTable();
@@ -405,7 +567,9 @@
   function renderPuzzle() {
     els.levelName.textContent = currentPuzzle.name;
     els.levelEmoji.textContent = currentPuzzle.emoji;
-    els.pangramBadge.textContent = `אשכולות זהב: ${currentPuzzle.words.filter(w => isPangram(w, currentPuzzle)).length}`;
+    els.pangramBadge.textContent = isSentencePuzzle(currentPuzzle)
+      ? `מילות משפט: ${currentPuzzle.targetWords.length}`
+      : `אשכולות זהב: ${currentPuzzle.words.filter(w => isPangram(w, currentPuzzle)).length}`;
     const tiles = [...els.hiveWrap.querySelectorAll('.tile')];
     setTileLetter(tiles[0], currentPuzzle.center);
     tiles[0].setAttribute('aria-label', `אות זהובה ${currentPuzzle.center}`);
@@ -415,7 +579,39 @@
       tile.setAttribute('aria-label', `אות ${letter}`);
     });
     renderInput();
+    els.gameCard.classList.toggle('sentence-mode', isSentencePuzzle(currentPuzzle));
     els.gameCard.classList.toggle('level-finished', isLevelComplete());
+  }
+
+  function renderSentenceScene() {
+    if (!els.sentenceScene) return;
+    const show = isSentencePuzzle(currentPuzzle);
+    els.sentenceScene.hidden = !show;
+    if (!show) {
+      els.sentencePhrase.innerHTML = '';
+      els.sentenceArt.removeAttribute('src');
+      els.sentenceArt.alt = '';
+      return;
+    }
+    const ps = getPuzzleState(currentPuzzle.id);
+    const foundSet = new Set(ps.found || []);
+    els.sentenceArt.src = currentPuzzle.art?.src || '';
+    els.sentenceArt.alt = currentPuzzle.art?.alt || currentPuzzle.name;
+    els.sentencePhrase.innerHTML = '';
+    currentPuzzle.sentenceTokens.forEach(token => {
+      const piece = document.createElement('span');
+      if (!token.target) {
+        piece.className = 'sentence-token';
+        piece.textContent = token.text;
+        els.sentencePhrase.appendChild(piece);
+        return;
+      }
+      const found = foundSet.has(token.target);
+      piece.className = `sentence-slot ${found ? 'found' : 'empty'}`;
+      piece.dataset.word = token.target;
+      piece.textContent = `${token.prefix || ''}${found ? toFinalDisplay(token.target) : '____'}`;
+      els.sentencePhrase.appendChild(piece);
+    });
   }
 
   function setTileLetter(tile, letter) {
@@ -437,18 +633,21 @@
   function renderProgress() {
     const ps = getPuzzleState(currentPuzzle.id);
     const found = ps.found || [];
-    const total = currentPuzzle.words.length;
-    const pct = total ? found.length / total : 0;
-    const maxScore = currentPuzzle.words.reduce((sum, w) => sum + scoreWord(w, currentPuzzle), 0);
+    const completeFound = foundCompletionWords(currentPuzzle, found);
+    const goals = completionWords(currentPuzzle);
+    const total = goals.length;
+    const pct = total ? completeFound.length / total : 0;
+    const maxScore = goals.reduce((sum, w) => sum + scoreWord(w, currentPuzzle), 0);
     const score = found.reduce((sum, w) => sum + scoreWord(w, currentPuzzle), 0);
     ps.score = score;
     els.scoreNum.textContent = String(score);
-    els.scoreOrb.style.setProperty('--pct', `${Math.round((maxScore ? score / maxScore : 0) * 100)}%`);
+    els.scoreOrb.style.setProperty('--pct', `${Math.round(Math.min(1, maxScore ? score / maxScore : 0) * 100)}%`);
     els.progressFill.style.width = `${Math.round(pct * 100)}%`;
-    els.foundText.textContent = `${found.length} מתוך ${total} מילים`;
-    els.foundCounter.textContent = `${found.length}/${total}`;
-    els.foundToggleCount.textContent = `${found.length}/${total}`;
-    els.foundToggleBtn.setAttribute('aria-label', `מילים שנמצאו: ${found.length} מתוך ${total}`);
+    const label = isSentencePuzzle(currentPuzzle) ? 'מילים במשפט' : 'מילים';
+    els.foundText.textContent = `${completeFound.length} מתוך ${total} ${label}`;
+    els.foundCounter.textContent = `${completeFound.length}/${total}`;
+    els.foundToggleCount.textContent = `${completeFound.length}/${total}`;
+    els.foundToggleBtn.setAttribute('aria-label', `מילים שנמצאו: ${completeFound.length} מתוך ${total}`);
     const rank = [...RANKS].reverse().find(r => pct >= r.pct) || RANKS[0];
     els.rankText.textContent = `דרגה: ${rank.name}`;
     const stars = Math.min(5, Math.floor(pct * 5.999));
@@ -470,7 +669,10 @@
     }
     found.forEach(word => {
       const chip = document.createElement('div');
-      chip.className = `word-chip ${isPangram(word, currentPuzzle) ? 'golden' : ''}`;
+      const classes = ['word-chip'];
+      if (isPangram(word, currentPuzzle)) classes.push('golden');
+      if (isSentencePuzzle(currentPuzzle)) classes.push(isTargetWord(word, currentPuzzle) ? 'target' : 'bonus');
+      chip.className = classes.join(' ');
       chip.textContent = toFinalDisplay(word);
       chip.title = `${scoreWord(word, currentPuzzle)} נקודות`;
       els.wordsCloud.appendChild(chip);
@@ -480,7 +682,7 @@
   function renderHintTable() {
     const ps = getPuzzleState(currentPuzzle.id);
     const foundSet = new Set(ps.found || []);
-    const remaining = currentPuzzle.words.filter(w => !foundSet.has(w));
+    const remaining = completionWords(currentPuzzle).filter(w => !foundSet.has(w));
     const grouped = new Map();
     remaining.forEach(word => {
       const first = toFinalDisplay(word)[0];
@@ -491,7 +693,7 @@
     if (!remaining.length) {
       const row = document.createElement('div');
       row.className = 'hint-row';
-      row.textContent = 'כל המילים נמצאו. הכרם מלא אשכולות.';
+      row.textContent = isSentencePuzzle(currentPuzzle) ? 'כל מילות המשפט נמצאו.' : 'כל המילים נמצאו. הכרם מלא אשכולות.';
       els.hintGrid.appendChild(row);
       return;
     }
@@ -541,30 +743,34 @@
   function submitWord() {
     const word = sanitizeWord(input);
     const ps = getPuzzleState(currentPuzzle.id);
-    const allowed = new Set([currentPuzzle.center, ...currentPuzzle.letters]);
     const pretty = toFinalDisplay(word);
+    const wasComplete = isLevelComplete();
 
     if (!word) return toast('צריך קודם לבנות מילה.', 'bad');
     if (word.length < currentPuzzle.minLength) return fail(`קצר מדי. צריך לפחות ${currentPuzzle.minLength} אותיות.`);
-    if (!word.includes(currentPuzzle.center)) return fail(`חסרה האות הזהובה ${currentPuzzle.center}. היא קצת דיווה.`);
-    if (![...word].every(ch => allowed.has(ch))) return fail('יש במילה אות שלא גדלה בכרם הזה.');
+    if (currentPuzzle.requiresCenter && !word.includes(currentPuzzle.center)) return fail(`חסרה האות הזהובה ${currentPuzzle.center}. היא קצת דיווה.`);
+    if (!wordFitsPuzzle(word, currentPuzzle)) return fail('יש במילה אות שלא גדלה בכרם הזה.');
     if (ps.found.includes(word)) return fail(`${pretty} כבר ברשימה.`);
     if (!currentPuzzle.words.includes(word)) return fail(`${pretty} לא נמצאת ברשימת השלב. אפשר להוסיף אותה בעורך.`);
 
     ps.found.push(word);
     input = '';
     renderInput('success');
+    renderSentenceScene();
     renderProgress();
     renderFoundWords();
     renderHintTable();
     const score = scoreWord(word, currentPuzzle);
     const gold = isPangram(word, currentPuzzle);
+    const target = isTargetWord(word, currentPuzzle);
+    const completedNow = !wasComplete && isLevelComplete();
     makeParticles(gold ? 'זהב!' : `+${score}`, gold);
     blip(gold ? 740 : 620, .13, 'sine');
-    if (gold || isLevelComplete()) launchConfetti(gold ? 110 : 170);
-    toast(gold ? `אשכול זהב: ${pretty}!` : `יפה! ${pretty} שווה ${score} נקודות`, gold ? 'gold' : 'good');
-    if (isLevelComplete()) {
-      window.setTimeout(() => toast('כל המילים נמצאו. הכרם מלא אשכולות.', 'gold'), 500);
+    if (gold || completedNow) launchConfetti(gold ? 110 : 170);
+    if (isSentencePuzzle(currentPuzzle) && !target) toast(`בונוס! ${pretty} שווה ${score} נקודות`, 'good');
+    else toast(gold ? `אשכול זהב: ${pretty}!` : `יפה! ${pretty} שווה ${score} נקודות`, gold ? 'gold' : 'good');
+    if (completedNow) {
+      window.setTimeout(() => toast(isSentencePuzzle(currentPuzzle) ? 'המשפט הושלם. הכרם צייר סיפור.' : 'כל המילים נמצאו. הכרם מלא אשכולות.', 'gold'), 500);
     }
   }
 
@@ -602,14 +808,15 @@
 
   function isLevelComplete() {
     const ps = getPuzzleState(currentPuzzle.id);
-    return currentPuzzle.words.length > 0 && (ps.found || []).length >= currentPuzzle.words.length;
+    const goals = completionWords(currentPuzzle);
+    return goals.length > 0 && foundCompletionWords(currentPuzzle, ps.found || []).length >= goals.length;
   }
 
   function giveHint() {
     const ps = getPuzzleState(currentPuzzle.id);
     const foundSet = new Set(ps.found || []);
-    const remaining = currentPuzzle.words.filter(w => !foundSet.has(w));
-    if (!remaining.length) return toast('אין מה לרמוז. ניצחתם את הכרם.', 'good');
+    const remaining = completionWords(currentPuzzle).filter(w => !foundSet.has(w));
+    if (!remaining.length) return toast(isSentencePuzzle(currentPuzzle) ? 'כל מילות המשפט כבר נמצאו.' : 'אין מה לרמוז. ניצחתם את הכרם.', 'good');
     const word = remaining[Math.floor(Math.random() * remaining.length)];
     ps.hints = (ps.hints || 0) + 1;
     saveState();
@@ -757,6 +964,7 @@
     corpus.seedItems = items.filter(item => item.unique >= 5 && item.unique <= 7);
     corpus.source = source;
     corpus.label = label;
+    hydrateSentencePuzzlesFromCorpus();
     if (!silent) updateCorpusStatus();
   }
 
@@ -1132,6 +1340,7 @@
     clearFailedInputTimer();
     input = '';
     renderInput();
+    renderSentenceScene();
     renderProgress();
     renderFoundWords();
     renderHintTable();
@@ -1145,6 +1354,7 @@
     clearFailedInputTimer();
     input = '';
     renderInput();
+    renderSentenceScene();
     renderProgress();
     renderFoundWords();
     renderHintTable();

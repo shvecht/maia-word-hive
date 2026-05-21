@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" role="img" aria-label="אבא קורא על תות ירוק בבית">
+  <rect width="320" height="220" rx="28" fill="#f3fff8"/>
+  <path d="M40 120 160 44l120 76v68H40z" fill="#fff"/>
+  <path d="M160 44 32 124h256z" fill="#54d37f"/>
+  <rect x="72" y="132" width="52" height="36" rx="8" fill="#d8f5ff"/>
+  <rect x="198" y="132" width="52" height="36" rx="8" fill="#d8f5ff"/>
+  <circle cx="98" cy="88" r="20" fill="#ffd7b5"/>
+  <path d="M78 90c6-22 38-23 45-3-15-8-30-4-45 3z" fill="#4b2b55"/>
+  <path d="M78 116c15 22 43 22 58 0l8 58H70z" fill="#8565ff"/>
+  <path d="M116 135c24-18 55-18 78 0v42c-23-18-54-18-78 0z" fill="#fff6bf" stroke="#6f3acb" stroke-width="5"/>
+  <path d="M160 118c8-26 48-24 55 4 9 35-36 55-57 25-6-9-6-20 2-29z" fill="#7fd96b"/>
+  <path d="M171 106c2 10 14 16 27 8-4 15-20 20-32 10z" fill="#2fbf71"/>
+  <g fill="#eaffdc" opacity=".85">
+    <circle cx="176" cy="131" r="4"/><circle cx="197" cy="139" r="4"/><circle cx="182" cy="154" r="4"/>
+  </g>
+</svg>

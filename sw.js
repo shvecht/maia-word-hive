@@ -1,12 +1,18 @@
-const CACHE_NAME = 'kerem-vines-v9';
+const CACHE_NAME = 'kerem-vines-v11';
 const ASSETS = [
   './',
   './index.html',
   './script.js',
-  './script.js?v=8',
+  './script.js?v=10',
   './assets/fonts/alef-hebrew-400.woff2',
   './assets/fonts/alef-hebrew-700.woff2',
   './assets/fonts/OFL-Alef.txt',
+  './assets/sentence-art/dad-strawberry-home.svg',
+  './assets/sentence-art/dad-green-strawberry.svg',
+  './assets/sentence-art/mom-sweet-strawberry-sea.svg',
+  './assets/sentence-art/baby-strawberry-nap.svg',
+  './assets/sentence-art/boy-pink-horse.svg',
+  './assets/sentence-art/girl-banana-field.svg',
   './manifest.webmanifest',
   './icon.svg',
   './icon-180.png',

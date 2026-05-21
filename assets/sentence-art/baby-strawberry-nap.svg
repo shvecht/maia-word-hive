@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" role="img" aria-label="תינוק ישן עם תות מתוק בים">
+  <rect width="320" height="220" rx="28" fill="#fff9e8"/>
+  <path d="M0 158c42-18 78-18 120 0s78 18 120 0c30-13 55-15 80-2v64H0z" fill="#9ee8ff"/>
+  <path d="M0 182c42-12 78-12 120 0s78 12 120 0c31-9 57-11 80-1v39H0z" fill="#d8f5ff"/>
+  <ellipse cx="126" cy="126" rx="70" ry="38" fill="#fff" stroke="#8f57e8" stroke-width="5"/>
+  <circle cx="94" cy="102" r="25" fill="#ffd7b5"/>
+  <path d="M75 95c8-19 38-20 46-1-16-6-31-5-46 1z" fill="#60406d"/>
+  <path d="M86 110c7 6 15 6 22 0" fill="none" stroke="#241331" stroke-width="4" stroke-linecap="round"/>
+  <path d="M123 114c26 2 48 11 62 27-29 25-76 22-108-2 10-17 25-25 46-25z" fill="#d9c4ff"/>
+  <path d="M206 86c18-21 52-8 53 20 1 34-42 49-61 22-8-13-5-29 8-42z" fill="#ff4b6e"/>
+  <path d="M216 78c3 11 17 15 29 5-4 17-21 23-34 12z" fill="#2fbf71"/>
+  <circle cx="228" cy="118" r="18" fill="none" stroke="#ffd166" stroke-width="5" stroke-dasharray="5 7"/>
+</svg>

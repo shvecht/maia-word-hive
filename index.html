@@ -453,6 +453,83 @@
       flex-wrap: wrap;
     }
 
+    .sentence-scene {
+      display: grid;
+      grid-template-columns: minmax(96px, 132px) 1fr;
+      align-items: center;
+      gap: 12px;
+      margin: clamp(6px, 1.2vw, 10px) 0;
+      padding: 10px 12px;
+      border-radius: 24px;
+      background: rgba(255,255,255,.58);
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,.04);
+    }
+
+    .sentence-scene[hidden] { display: none; }
+
+    .sentence-art-wrap {
+      min-width: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 20px;
+      background: rgba(255,255,255,.72);
+      box-shadow: var(--soft-shadow);
+      overflow: hidden;
+    }
+
+    .sentence-art {
+      width: 100%;
+      max-height: 118px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .sentence-phrase {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      direction: rtl;
+      font-size: clamp(22px, 3.4vw, 34px);
+      font-weight: 1000;
+      line-height: 1.15;
+    }
+
+    .sentence-token,
+    .sentence-slot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      border-radius: 999px;
+      padding: 5px 11px;
+      white-space: nowrap;
+    }
+
+    .sentence-token {
+      color: #4e405b;
+      background: rgba(255,255,255,.56);
+    }
+
+    .sentence-slot {
+      min-width: 68px;
+      color: #20122f;
+      background: rgba(255,255,255,.82);
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,.05), 0 7px 16px rgba(60,32,90,.08);
+    }
+
+    .sentence-slot.empty {
+      color: rgba(35, 19, 49, .48);
+      background: rgba(255,255,255,.50);
+    }
+
+    .sentence-slot.found {
+      background: linear-gradient(135deg, #e6ff91, #d9c4ff);
+      color: #150520;
+      animation: chipIn .34s cubic-bezier(.2,.8,.15,1.3);
+    }
+
     .input-zone {
       text-align: center;
       margin: clamp(6px, 1.3vw, 10px) auto 4px;
@@ -488,6 +565,26 @@
 
     .current-word.invalid { animation: shake .34s ease; background: #fff0f3; }
     .current-word.success { animation: pop .42s cubic-bezier(.2,.8,.15,1.2); background: #ecfff6; }
+
+    .game-card.sentence-mode .progress-panel {
+      margin-bottom: 6px;
+    }
+
+    .game-card.sentence-mode .input-zone {
+      min-height: 54px;
+      margin-block: 2px;
+    }
+
+    .game-card.sentence-mode .current-word {
+      min-height: 52px;
+      font-size: clamp(28px, 6vw, 46px);
+    }
+
+    .game-card.sentence-mode .hive-wrap {
+      height: clamp(260px, min(74vw, 43svh), 390px);
+      max-height: 43svh;
+      margin-block: 4px 10px;
+    }
 
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
@@ -801,6 +898,14 @@
     .word-chip.golden {
       background: linear-gradient(135deg, #e6ff91, #8f57e8 55%, #4b1377);
       color: #1f102b;
+    }
+
+    .word-chip.target {
+      background: linear-gradient(135deg, #e6ff91, #ffffff);
+    }
+
+    .word-chip.bonus {
+      opacity: .82;
     }
 
     @keyframes chipIn {
@@ -1185,6 +1290,20 @@
       .progress-panel {
         padding: 10px 12px;
       }
+      .sentence-scene {
+        grid-template-columns: minmax(76px, 104px) 1fr;
+        padding: 8px 10px;
+      }
+      .sentence-art { max-height: 88px; }
+      .sentence-token,
+      .sentence-slot {
+        min-height: 34px;
+        padding: 4px 9px;
+      }
+      .sentence-phrase {
+        gap: 6px;
+        font-size: clamp(19px, 3vw, 27px);
+      }
       .input-zone {
         min-height: 58px;
         margin-block: 4px 2px;
@@ -1195,6 +1314,10 @@
       }
       .current-word.empty {
         font-size: clamp(18px, 3vw, 27px);
+      }
+      .game-card.sentence-mode .hive-wrap {
+        height: clamp(244px, min(66vw, 36svh), 310px);
+        max-height: 36svh;
       }
       .hive-wrap {
         width: min(520px, 90vw, 68svh);
@@ -1224,6 +1347,22 @@
         padding: 7px 10px;
       }
       .score-orb { width: clamp(62px, 16vw, 78px); }
+      .sentence-scene {
+        grid-template-columns: 86px 1fr;
+        gap: 8px;
+        padding: 8px;
+      }
+      .sentence-art { max-height: 78px; }
+      .sentence-phrase {
+        gap: 5px;
+        font-size: clamp(18px, 5vw, 25px);
+      }
+      .sentence-token,
+      .sentence-slot {
+        min-width: 54px;
+        min-height: 32px;
+        padding: 4px 8px;
+      }
       .current-word {
         min-width: 100%;
         min-height: 56px;
@@ -1319,6 +1458,13 @@
           </div>
         </div>
 
+        <div class="sentence-scene" id="sentenceScene" hidden>
+          <div class="sentence-art-wrap">
+            <img class="sentence-art" id="sentenceArt" alt="" />
+          </div>
+          <div class="sentence-phrase" id="sentencePhrase" aria-live="polite"></div>
+        </div>
+
         <div class="input-zone" aria-live="polite">
           <div id="currentWord" class="current-word empty">לחצו על אותיות</div>
         </div>
@@ -1376,7 +1522,7 @@
         </div>
 
         <div class="family-note">
-          כל מילה צריכה לכלול את האות המרכזית. מותר להשתמש באותה אות שוב ושוב. כפתור ״שלב קורפוס״ יוצר לוח אקראי מתוך רשימת מילים עברית, וב״עורך להורים״ אפשר להוסיף שלבים משלכם תוך שתי דקות.
+          בשלבים רגילים כל מילה צריכה לכלול את האות המרכזית. בשלבי משפט מחפשים את מילות המשפט, ומילים נוספות מאותן שבע אותיות מתקבלות כבונוס. מותר להשתמש באותה אות שוב ושוב.
         </div>
       </aside>
     </section>
@@ -1392,11 +1538,11 @@
       </div>
       <p>כרם הוא משחק מילים עברי קטן ונוצץ: לוחצים או מחליקים אצבע בין אותיות, בונים מילים, ואוספים אשכולות מילים.</p>
       <ul class="rules-list">
-        <li>המילה חייבת לכלול את האות הירוקה שבמרכז.</li>
+        <li>בשלבים רגילים המילה חייבת לכלול את האות הירוקה שבמרכז; בשלבי משפט צריך למצוא את מילות המשפט.</li>
         <li>אפשר להשתמש באותה אות כמה פעמים שרוצים, גם במסלול החלקה שחוזר לאותה משבצת.</li>
         <li>ברוב השלבים המילים הן באורך 3 אותיות ומעלה.</li>
         <li>מילה שמשתמשת בכל שבע האותיות היא אשכול זהב ומקבלת בונוס.</li>
-        <li>כפתור ״שלב קורפוס״ יוצר שלב אקראי מתוך רשימת מילים עברית גדולה. אם אין רשת, יש מיני קורפוס מקומי לגיבוי.</li>
+        <li>כפתור ״שלב קורפוס״ יוצר שלב אקראי מתוך רשימת מילים עברית גדולה. שלבי משפט משתמשים באותו קורפוס למילות בונוס.</li>
         <li>אותיות סופיות עובדות לבד: לחיצה על מ בסוף מילה תוצג כ־ם, נ תהפוך ל־ן וכן הלאה.</li>
       </ul>
       <div class="modal-actions">
@@ -1492,6 +1638,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=8"></script>
+  <script src="script.js?v=10"></script>
 </body>
 </html>
