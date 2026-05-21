@@ -41,11 +41,12 @@
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     html, body {
+      height: 100%;
       min-height: 100%;
       margin: 0;
       color: var(--ink);
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Hebrew", Arial, sans-serif;
-      overflow-x: hidden;
+      overflow: hidden;
       background:
         radial-gradient(circle at 8% 8%, rgba(255, 79, 163, .20), transparent 32rem),
         radial-gradient(circle at 92% 14%, rgba(82, 183, 255, .26), transparent 34rem),
@@ -74,7 +75,12 @@
       z-index: 1;
       min-height: 100svh;
       min-height: 100dvh;
+      height: 100svh;
+      height: 100dvh;
       padding: calc(14px + var(--safe-top)) clamp(12px, 3vw, 34px) calc(18px + var(--safe-bottom));
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
 
     .sky-candy {
@@ -129,6 +135,8 @@
       gap: 14px;
       margin: 0 auto clamp(10px, 1.8vw, 16px);
       max-width: 1220px;
+      width: 100%;
+      flex: 0 0 auto;
     }
 
     .brand {
@@ -231,6 +239,9 @@
       grid-template-columns: minmax(310px, 1fr) minmax(300px, 420px);
       gap: clamp(14px, 2.2vw, 24px);
       align-items: stretch;
+      flex: 1 1 auto;
+      min-height: 0;
+      width: 100%;
     }
 
     .game-card, .side-card {
@@ -245,7 +256,10 @@
     .game-card {
       position: relative;
       padding: clamp(16px, 2.8vw, 28px);
-      min-height: clamp(600px, calc(100svh - 148px), 680px);
+      min-height: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
 
     .side-card {
@@ -253,7 +267,9 @@
       display: flex;
       flex-direction: column;
       gap: 15px;
-      min-height: clamp(600px, calc(100svh - 148px), 680px);
+      min-height: 0;
+      height: 100%;
+      overflow: auto;
     }
 
     .status-row {
@@ -312,6 +328,46 @@
       z-index: 1;
       font-weight: 1000;
       font-size: clamp(22px, 5vw, 35px);
+    }
+
+    .score-actions {
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      gap: 10px;
+    }
+
+    .found-toggle {
+      min-width: 82px;
+      min-height: 58px;
+      border-radius: 20px;
+      padding: 8px 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.76);
+      box-shadow: var(--soft-shadow), inset 0 -3px 0 rgba(0,0,0,.05);
+      border: 1px solid rgba(255,255,255,.72);
+      font-weight: 1000;
+      transition: transform .16s ease, background .16s ease, box-shadow .16s ease;
+    }
+
+    .found-toggle span {
+      font-size: clamp(18px, 3vw, 25px);
+      line-height: 1;
+    }
+
+    .found-toggle small {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .found-toggle.open,
+    .found-toggle:active {
+      transform: translateY(1px) scale(.98);
+      background: #fff5c6;
+      box-shadow: var(--soft-shadow), 0 0 0 4px rgba(255, 212, 42, .18);
     }
 
     .progress-panel {
@@ -426,6 +482,7 @@
       isolation: isolate;
       touch-action: none;
       user-select: none;
+      flex: 1 1 auto;
     }
 
     @supports not (height: 100svh) {
@@ -586,6 +643,17 @@
       font-size: 22px;
     }
 
+    .side-close {
+      display: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.84);
+      box-shadow: var(--soft-shadow);
+      font-size: 20px;
+      font-weight: 1000;
+    }
+
     .found-counter {
       color: var(--muted);
       font-weight: 900;
@@ -704,6 +772,15 @@
     .corpus-dot.ready { background: #20b970; box-shadow: 0 0 0 5px rgba(32,185,112,.18); }
     .corpus-dot.cache { background: #52b7ff; box-shadow: 0 0 0 5px rgba(82,183,255,.18); }
     .corpus-dot.fallback { background: #ff65b1; box-shadow: 0 0 0 5px rgba(255,101,177,.18); }
+
+    .side-scrim {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 31;
+      background: rgba(25, 18, 40, .18);
+      backdrop-filter: blur(2px);
+    }
 
     @keyframes dotBlink {
       from { transform: scale(.82); opacity: .65; }
@@ -926,9 +1003,31 @@
     @media (max-width: 920px) {
       .topbar { align-items: flex-start; flex-direction: column; }
       .top-actions { justify-content: start; width: 100%; }
-      .layout { grid-template-columns: 1fr; }
-      .game-card, .side-card { min-height: auto; }
-      .side-card { order: 2; }
+      .layout {
+        display: block;
+        max-width: 780px;
+      }
+      .game-card { height: 100%; }
+      .side-card {
+        position: fixed;
+        z-index: 32;
+        inset: auto clamp(12px, 3vw, 30px) calc(14px + var(--safe-bottom));
+        height: min(62svh, 560px);
+        max-height: calc(100svh - 112px - var(--safe-top) - var(--safe-bottom));
+        transform: translateY(calc(100% + 28px));
+        opacity: 0;
+        pointer-events: none;
+        transition: transform .22s ease, opacity .18s ease;
+      }
+      .side-card.open {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .side-scrim.open {
+        display: block;
+      }
+      .side-close { display: grid; place-items: center; }
       .hive-wrap {
         height: clamp(310px, min(72vw, 46svh), 480px);
         max-height: 46svh;
@@ -1005,6 +1104,14 @@
       .pill-button, .select-wrap select { min-height: 42px; padding: 9px 13px; }
       .tagline { display: none; }
       .game-card { padding: 13px 13px 10px; }
+      .score-actions { gap: 7px; }
+      .found-toggle {
+        min-width: 68px;
+        min-height: 52px;
+        border-radius: 17px;
+        padding: 7px 10px;
+      }
+      .score-orb { width: clamp(62px, 16vw, 78px); }
       .current-word {
         min-width: 100%;
         min-height: 56px;
@@ -1083,7 +1190,13 @@
               <span class="badge" id="pangramBadge">מילת זהב: 0</span>
             </div>
           </div>
-          <div class="score-orb" id="scoreOrb" aria-label="ניקוד"><span id="scoreNum">0</span></div>
+          <div class="score-actions">
+            <button class="found-toggle" id="foundToggleBtn" type="button" aria-expanded="false" aria-controls="sideCard">
+              <span id="foundToggleCount">0/0</span>
+              <small>מילים</small>
+            </button>
+            <div class="score-orb" id="scoreOrb" aria-label="ניקוד"><span id="scoreNum">0</span></div>
+          </div>
         </div>
 
         <div class="progress-panel">
@@ -1118,10 +1231,12 @@
         <div class="mini-kbd" aria-hidden="true">אפשר ללחוץ, להקליד, או להחליק אצבע בין האותיות. בהרמת האצבע מאיה בודקת את המילה.</div>
       </article>
 
+      <button class="side-scrim" id="sideScrim" type="button" aria-label="סגירת מילים ורמזים"></button>
       <aside class="side-card" id="sideCard">
         <div class="side-heading">
           <h2>מילים שנמצאו</h2>
           <div class="found-counter" id="foundCounter">0</div>
+          <button class="side-close" id="sideCloseBtn" type="button" aria-label="סגירת מילים ורמזים">×</button>
         </div>
         <div class="words-cloud" id="wordsCloud">
           <div class="empty-list">עוד אין מילים. הכוורת מחכה לבאזז הראשון.</div>
@@ -1265,6 +1380,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>

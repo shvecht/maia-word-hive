@@ -107,9 +107,13 @@
     progressFill: document.getElementById('progressFill'),
     rankText: document.getElementById('rankText'),
     foundText: document.getElementById('foundText'),
+    foundToggleBtn: document.getElementById('foundToggleBtn'),
+    foundToggleCount: document.getElementById('foundToggleCount'),
     currentWord: document.getElementById('currentWord'),
     gameCard: document.getElementById('gameCard'),
     sideCard: document.getElementById('sideCard'),
+    sideScrim: document.getElementById('sideScrim'),
+    sideCloseBtn: document.getElementById('sideCloseBtn'),
     hiveWrap: document.getElementById('hiveWrap'),
     gestureSvg: document.getElementById('gestureSvg'),
     gesturePolyline: document.getElementById('gesturePolyline'),
@@ -150,6 +154,7 @@
   let currentLetters = [];
   let input = '';
   let failClearTimer = null;
+  let sidePanelOpen = false;
   let state = loadState();
   let settings = loadSettings();
   let audioCtx = null;
@@ -383,6 +388,7 @@
     currentPuzzle = puzzles.find(p => p.id === id) || puzzles[0];
     localStorage.setItem(CURRENT_PUZZLE_KEY, currentPuzzle.id);
     els.levelSelect.value = currentPuzzle.id;
+    setSidePanelOpen(false);
     clearFailedInputTimer();
     input = '';
     currentLetters = [...currentPuzzle.letters];
@@ -433,6 +439,8 @@
     els.progressFill.style.width = `${Math.round(pct * 100)}%`;
     els.foundText.textContent = `${found.length} מתוך ${total} מילים`;
     els.foundCounter.textContent = `${found.length}/${total}`;
+    els.foundToggleCount.textContent = `${found.length}/${total}`;
+    els.foundToggleBtn.setAttribute('aria-label', `מילים שנמצאו: ${found.length} מתוך ${total}`);
     const rank = [...RANKS].reverse().find(r => pct >= r.pct) || RANKS[0];
     els.rankText.textContent = `דרגה: ${rank.name}`;
     const stars = Math.min(5, Math.floor(pct * 5.999));
@@ -612,6 +620,18 @@
     els.hintGrid.hidden = !hintVisible;
     els.revealTableBtn.textContent = hintVisible ? 'הסתר טבלה' : 'טבלת אורכים';
     if (hintVisible) renderHintTable();
+  }
+
+  function setSidePanelOpen(open) {
+    sidePanelOpen = !!open;
+    els.sideCard.classList.toggle('open', sidePanelOpen);
+    els.sideScrim.classList.toggle('open', sidePanelOpen);
+    els.foundToggleBtn.classList.toggle('open', sidePanelOpen);
+    els.foundToggleBtn.setAttribute('aria-expanded', String(sidePanelOpen));
+  }
+
+  function toggleSidePanel() {
+    setSidePanelOpen(!sidePanelOpen);
   }
 
   function toast(message, type = '') {
@@ -1021,6 +1041,9 @@
     els.deleteBtn.addEventListener('click', deleteLetter);
     els.shuffleBtn.addEventListener('click', shuffleLetters);
     els.enterBtn.addEventListener('click', submitWord);
+    els.foundToggleBtn.addEventListener('click', toggleSidePanel);
+    els.sideScrim.addEventListener('click', () => setSidePanelOpen(false));
+    els.sideCloseBtn.addEventListener('click', () => setSidePanelOpen(false));
     els.hintBtn.addEventListener('click', giveHint);
     els.revealTableBtn.addEventListener('click', toggleHintTable);
     els.soundSwitch.addEventListener('click', () => { settings.sound = !settings.sound; saveSettings(); updateSwitches(); blip(520, .1); });
@@ -1038,6 +1061,7 @@
   function handleKeydown(e) {
     const active = document.activeElement;
     if (active && ['INPUT', 'TEXTAREA', 'SELECT'].includes(active.tagName)) return;
+    if (e.key === 'Escape' && sidePanelOpen) { e.preventDefault(); setSidePanelOpen(false); return; }
     if (e.key === 'Enter') { e.preventDefault(); submitWord(); return; }
     if (e.key === 'Backspace') { e.preventDefault(); deleteLetter(); return; }
     if (e.key === ' ') { e.preventDefault(); shuffleLetters(); return; }

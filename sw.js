@@ -1,8 +1,9 @@
-const CACHE_NAME = 'maya-word-hive-v3';
+const CACHE_NAME = 'maya-word-hive-v4';
 const ASSETS = [
   './',
   './index.html',
   './script.js',
+  './script.js?v=4',
   './manifest.webmanifest',
   './icon.svg',
   './icon-180.png',
