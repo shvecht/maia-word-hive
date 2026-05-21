@@ -76,7 +76,7 @@
       requiresCenter: false,
       targetWords: ['אבא','אוהב','תות','יפה','בית'],
       sentenceTokens: [{ target: 'אבא' }, { target: 'אוהב' }, { target: 'תות' }, { target: 'יפה' }, { prefix: 'ב', target: 'בית' }],
-      art: { src: 'assets/sentence-art/dad-strawberry-home.svg', alt: 'אבא עם תות בבית' }
+      art: { src: 'assets/sentence-art/dad-strawberry-home.webp', alt: 'אבא עם תות בבית' }
     },
     {
       id: 'sentence-dad-green-strawberry',
@@ -90,7 +90,7 @@
       requiresCenter: false,
       targetWords: ['אבא','קורא','תות','ירוק','בית'],
       sentenceTokens: [{ target: 'אבא' }, { target: 'קורא' }, { text: 'על' }, { target: 'תות' }, { target: 'ירוק' }, { prefix: 'ב', target: 'בית' }],
-      art: { src: 'assets/sentence-art/dad-green-strawberry.svg', alt: 'אבא קורא על תות ירוק בבית' }
+      art: { src: 'assets/sentence-art/dad-green-strawberry.webp', alt: 'אבא קורא על תות ירוק בבית' }
     },
     {
       id: 'sentence-mom-sweet-strawberry-sea',
@@ -104,7 +104,7 @@
       requiresCenter: false,
       targetWords: ['אימא','קוראת','תות','מתוק'],
       sentenceTokens: [{ target: 'אימא' }, { target: 'קוראת' }, { text: 'על' }, { target: 'תות' }, { target: 'מתוק' }, { text: 'בים' }],
-      art: { src: 'assets/sentence-art/mom-sweet-strawberry-sea.svg', alt: 'אימא קוראת על תות מתוק בים' }
+      art: { src: 'assets/sentence-art/mom-sweet-strawberry-sea.webp', alt: 'אימא קוראת על תות מתוק בים' }
     },
     {
       id: 'sentence-baby-strawberry-nap',
@@ -118,7 +118,7 @@
       requiresCenter: false,
       targetWords: ['תינוק','ישן','תות','מתוק'],
       sentenceTokens: [{ target: 'תינוק' }, { target: 'ישן' }, { text: 'עם' }, { target: 'תות' }, { target: 'מתוק' }, { text: 'בים' }],
-      art: { src: 'assets/sentence-art/baby-strawberry-nap.svg', alt: 'תינוק ישן עם תות מתוק בים' }
+      art: { src: 'assets/sentence-art/baby-strawberry-nap.webp', alt: 'תינוק ישן עם תות מתוק בים' }
     },
     {
       id: 'sentence-boy-pink-horse',
@@ -132,7 +132,7 @@
       requiresCenter: false,
       targetWords: ['ילד','רוקד','סוס','ורוד'],
       sentenceTokens: [{ target: 'ילד' }, { target: 'רוקד' }, { text: 'עם' }, { target: 'סוס' }, { target: 'ורוד' }],
-      art: { src: 'assets/sentence-art/boy-pink-horse.svg', alt: 'ילד רוקד עם סוס ורוד' }
+      art: { src: 'assets/sentence-art/boy-pink-horse.webp', alt: 'ילד רוקד עם סוס ורוד' }
     },
     {
       id: 'sentence-girl-banana-field',
@@ -146,7 +146,7 @@
       requiresCenter: false,
       targetWords: ['ילדה','ישנה','בננה','שדה'],
       sentenceTokens: [{ target: 'ילדה' }, { target: 'ישנה' }, { text: 'ליד' }, { target: 'בננה' }, { prefix: 'ב', target: 'שדה' }],
-      art: { src: 'assets/sentence-art/girl-banana-field.svg', alt: 'ילדה ישנה ליד בננה בשדה' }
+      art: { src: 'assets/sentence-art/girl-banana-field.webp', alt: 'ילדה ישנה ליד בננה בשדה' }
     }
   ];
 
