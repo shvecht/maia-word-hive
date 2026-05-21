@@ -407,17 +407,24 @@
     els.levelEmoji.textContent = currentPuzzle.emoji;
     els.pangramBadge.textContent = `אשכולות זהב: ${currentPuzzle.words.filter(w => isPangram(w, currentPuzzle)).length}`;
     const tiles = [...els.hiveWrap.querySelectorAll('.tile')];
-    tiles[0].textContent = currentPuzzle.center;
-    tiles[0].dataset.letter = currentPuzzle.center;
+    setTileLetter(tiles[0], currentPuzzle.center);
     tiles[0].setAttribute('aria-label', `אות זהובה ${currentPuzzle.center}`);
     currentLetters.forEach((letter, idx) => {
       const tile = tiles[idx + 1];
-      tile.textContent = letter;
-      tile.dataset.letter = letter;
+      setTileLetter(tile, letter);
       tile.setAttribute('aria-label', `אות ${letter}`);
     });
     renderInput();
     els.gameCard.classList.toggle('level-finished', isLevelComplete());
+  }
+
+  function setTileLetter(tile, letter) {
+    tile.textContent = '';
+    const glyph = document.createElement('span');
+    glyph.className = 'tile-letter';
+    glyph.textContent = letter;
+    tile.appendChild(glyph);
+    tile.dataset.letter = letter;
   }
 
   function renderInput(className = '') {
