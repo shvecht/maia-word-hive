@@ -1,0 +1,1270 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffcc33" />
+  <meta name="application-name" content="מאיה" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="מאיה" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <title>מאיה · כוורת מילים עברית</title>
+  <style>
+    :root {
+      --bg1: #fff8d9;
+      --bg2: #ffe6fb;
+      --bg3: #dbf7ff;
+      --ink: #221a35;
+      --muted: #6d6379;
+      --card: rgba(255,255,255,.78);
+      --card-solid: #ffffff;
+      --honey: #ffd42a;
+      --honey-dark: #f5a400;
+      --berry: #ff4fa3;
+      --mint: #2ed6a3;
+      --sky: #52b7ff;
+      --grape: #8565ff;
+      --danger: #ff4b6e;
+      --good: #20b970;
+      --shadow: 0 18px 55px rgba(60, 32, 90, .18);
+      --soft-shadow: 0 10px 28px rgba(60, 32, 90, .12);
+      --radius: 28px;
+      --tap: clamp(64px, min(18vw, 10svh), 86px);
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      min-height: 100%;
+      margin: 0;
+      color: var(--ink);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Hebrew", Arial, sans-serif;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 8% 8%, rgba(255, 79, 163, .20), transparent 32rem),
+        radial-gradient(circle at 92% 14%, rgba(82, 183, 255, .26), transparent 34rem),
+        radial-gradient(circle at 46% 95%, rgba(46, 214, 163, .22), transparent 34rem),
+        linear-gradient(135deg, var(--bg1), var(--bg2) 48%, var(--bg3));
+    }
+
+    body {
+      min-height: 100svh;
+      min-height: 100dvh;
+      touch-action: manipulation;
+    }
+
+    button, input, textarea, select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .app-shell {
+      position: relative;
+      z-index: 1;
+      min-height: 100svh;
+      min-height: 100dvh;
+      padding: calc(14px + var(--safe-top)) clamp(12px, 3vw, 34px) calc(18px + var(--safe-bottom));
+    }
+
+    .sky-candy {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .blob {
+      position: absolute;
+      width: clamp(170px, 28vw, 360px);
+      height: clamp(170px, 28vw, 360px);
+      border-radius: 45% 55% 62% 38% / 55% 42% 58% 45%;
+      filter: blur(2px);
+      opacity: .23;
+      animation: drift 14s ease-in-out infinite alternate;
+    }
+
+    .blob.one { background: #ff75bf; inset-inline-start: -90px; top: 120px; }
+    .blob.two { background: #50ccff; inset-inline-end: -110px; top: 38px; animation-delay: -4s; }
+    .blob.three { background: #7ef0bb; inset-inline-start: 40%; bottom: -160px; animation-delay: -8s; }
+
+    .floaties span {
+      position: absolute;
+      display: block;
+      font-size: clamp(20px, 3.5vw, 42px);
+      animation: bob var(--speed, 7s) ease-in-out infinite;
+      opacity: .75;
+      transform-origin: center;
+    }
+    .floaties span:nth-child(1) { inset-inline-start: 9%; top: 15%; --speed: 8s; }
+    .floaties span:nth-child(2) { inset-inline-end: 10%; top: 26%; --speed: 7s; animation-delay: -2s; }
+    .floaties span:nth-child(3) { inset-inline-start: 18%; bottom: 13%; --speed: 9s; animation-delay: -5s; }
+    .floaties span:nth-child(4) { inset-inline-end: 21%; bottom: 9%; --speed: 6.5s; animation-delay: -3s; }
+
+    @keyframes drift {
+      from { transform: translate3d(0,0,0) rotate(0deg) scale(1); }
+      to { transform: translate3d(35px, -24px, 0) rotate(18deg) scale(1.08); }
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(-7deg); }
+      50% { transform: translate3d(0, -20px, 0) rotate(9deg); }
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 0 auto clamp(10px, 1.8vw, 16px);
+      max-width: 1220px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, #ffe45a, #ffad2f);
+      box-shadow: 0 16px 32px rgba(245, 164, 0, .28), inset 0 -5px 0 rgba(0,0,0,.08);
+      font-size: 34px;
+      animation: logoWiggle 5s ease-in-out infinite;
+    }
+
+    @keyframes logoWiggle {
+      0%, 85%, 100% { transform: rotate(0deg) scale(1); }
+      90% { transform: rotate(5deg) scale(1.04); }
+      95% { transform: rotate(-4deg) scale(1.03); }
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 6vw, 58px);
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+
+    .tagline {
+      margin-top: 4px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: clamp(13px, 2.2vw, 17px);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: end;
+    }
+
+    .pill-button, .select-wrap select, .small-pill {
+      border-radius: 999px;
+      background: rgba(255,255,255,.74);
+      box-shadow: var(--soft-shadow);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.68);
+      min-height: 44px;
+      padding: 10px 15px;
+      font-weight: 850;
+    }
+
+    .pill-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .pill-button:active { transform: translateY(2px) scale(.98); }
+    .pill-button.primary { background: linear-gradient(135deg, #ffe763, #ffb130); }
+    .pill-button.good { background: linear-gradient(135deg, #87ffd0, #32d999); }
+    .pill-button.pink { background: linear-gradient(135deg, #ffc1e2, #ff65b1); color: #371525; }
+    .pill-button[disabled] { opacity: .58; cursor: progress; filter: grayscale(.12); }
+
+    .select-wrap {
+      position: relative;
+    }
+
+    .select-wrap select {
+      appearance: none;
+      min-width: min(260px, 64vw);
+      padding-inline: 18px 42px;
+      color: var(--ink);
+    }
+
+    .select-wrap::after {
+      content: "⌄";
+      position: absolute;
+      inset-inline-end: 17px;
+      top: 50%;
+      transform: translateY(-56%);
+      font-size: 20px;
+      pointer-events: none;
+      color: var(--muted);
+    }
+
+    .layout {
+      max-width: 1220px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(310px, 1fr) minmax(300px, 420px);
+      gap: clamp(14px, 2.2vw, 24px);
+      align-items: stretch;
+    }
+
+    .game-card, .side-card {
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.70);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .game-card {
+      position: relative;
+      padding: clamp(16px, 2.8vw, 28px);
+      min-height: clamp(600px, calc(100svh - 148px), 680px);
+    }
+
+    .side-card {
+      padding: clamp(16px, 2.5vw, 24px);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      min-height: clamp(600px, calc(100svh - 148px), 680px);
+    }
+
+    .status-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: clamp(10px, 1.8vw, 18px);
+    }
+
+    .level-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .level-title strong {
+      font-size: clamp(20px, 3vw, 30px);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 7px 12px;
+      background: rgba(255, 255, 255, .72);
+      font-weight: 900;
+      color: #493852;
+    }
+
+    .score-orb {
+      width: clamp(72px, 14vw, 96px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: conic-gradient(from 180deg, #ffcf2e var(--pct, 0%), rgba(255,255,255,.66) 0);
+      box-shadow: inset 0 -8px 0 rgba(0,0,0,.06), var(--soft-shadow);
+      position: relative;
+    }
+
+    .score-orb::before {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      background: #fff9de;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.05);
+    }
+
+    .score-orb span {
+      position: relative;
+      z-index: 1;
+      font-weight: 1000;
+      font-size: clamp(22px, 5vw, 35px);
+    }
+
+    .progress-panel {
+      display: grid;
+      gap: 9px;
+      padding: 14px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.54);
+      margin-bottom: clamp(10px, 1.8vw, 18px);
+    }
+
+    .progress-line {
+      height: 16px;
+      background: rgba(43, 33, 66, .10);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #ffbd27, #ff4fa3, #8565ff);
+      transition: width .48s cubic-bezier(.2,.8,.15,1.2);
+      position: relative;
+    }
+
+    .progress-fill::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, transparent 0 35%, rgba(255,255,255,.58) 45%, transparent 55% 100%);
+      transform: translateX(100%);
+      animation: shine 2.2s linear infinite;
+    }
+
+    @keyframes shine {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-weight: 800;
+      flex-wrap: wrap;
+    }
+
+    .input-zone {
+      text-align: center;
+      margin: clamp(6px, 1.3vw, 10px) auto 4px;
+      min-height: clamp(58px, 8svh, 78px);
+      display: grid;
+      place-items: center;
+    }
+
+    .current-word {
+      min-width: min(440px, 90%);
+      max-width: 100%;
+      min-height: 64px;
+      padding: 10px 22px;
+      border-radius: 24px;
+      background: rgba(255,255,255,.68);
+      box-shadow: inset 0 -4px 0 rgba(0,0,0,.04), var(--soft-shadow);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(34px, 8vw, 58px);
+      font-weight: 1000;
+      letter-spacing: .03em;
+      overflow-wrap: anywhere;
+      transition: transform .18s ease, background .18s ease;
+      direction: rtl;
+    }
+
+    .current-word.empty {
+      color: rgba(34, 26, 53, .34);
+      font-size: clamp(20px, 5vw, 32px);
+      letter-spacing: 0;
+    }
+
+    .current-word.invalid { animation: shake .34s ease; background: #fff0f3; }
+    .current-word.success { animation: pop .42s cubic-bezier(.2,.8,.15,1.2); background: #ecfff6; }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      55% { transform: translateX(8px); }
+      80% { transform: translateX(-4px); }
+    }
+
+    @keyframes pop {
+      0% { transform: scale(.96); }
+      45% { transform: scale(1.06); }
+      100% { transform: scale(1); }
+    }
+
+    .hive-wrap {
+      position: relative;
+      margin: clamp(10px, 2vw, 20px) auto clamp(14px, 2vw, 22px);
+      width: min(560px, 96vw, 68svh);
+      height: min(520px, 84vw);
+      height: clamp(300px, min(84vw, 58svh), 520px);
+      min-height: 0;
+      max-width: 100%;
+      max-height: 58svh;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+      touch-action: none;
+      user-select: none;
+    }
+
+    @supports not (height: 100svh) {
+      :root { --tap: min(86px, 18vw); }
+      .game-card, .side-card { min-height: 680px; }
+      .hive-wrap {
+      width: min(560px, 96vw);
+      height: min(520px, 84vw);
+      min-height: 330px;
+        max-height: none;
+      }
+    }
+
+    .gesture-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .gesture-layer polyline {
+      fill: none;
+      stroke: rgba(255, 79, 163, .78);
+      stroke-width: 13;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 1 20;
+      filter: drop-shadow(0 8px 12px rgba(133, 101, 255, .28));
+      animation: trailPulse .55s ease-in-out infinite alternate;
+    }
+
+    @keyframes trailPulse {
+      from { stroke-width: 11; opacity: .68; }
+      to { stroke-width: 16; opacity: .92; }
+    }
+
+    .hive-glow {
+      position: absolute;
+      inset: 14% 14%;
+      border-radius: 48%;
+      background: radial-gradient(circle, rgba(255, 208, 45, .38), rgba(255, 79, 163, .10) 45%, transparent 72%);
+      filter: blur(16px);
+      animation: pulseGlow 4s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(.95); opacity: .74; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
+
+    .tile {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      transform: translate(-50%, -50%);
+      width: var(--tap);
+      aspect-ratio: 1.12 / 1;
+      clip-path: polygon(25% 3%, 75% 3%, 100% 50%, 75% 97%, 25% 97%, 0 50%);
+      background: rgba(255,255,255,.86);
+      box-shadow: 0 13px 24px rgba(60, 32, 90, .15), inset 0 -8px 0 rgba(0,0,0,.06);
+      display: grid;
+      place-items: center;
+      font-size: clamp(30px, 8vw, 58px);
+      font-weight: 1000;
+      transition: transform .18s cubic-bezier(.2,.8,.15,1.25), filter .18s ease, box-shadow .18s ease;
+      user-select: none;
+      z-index: 4;
+    }
+
+    .tile.center {
+      background: linear-gradient(145deg, #fff174, #ffb623);
+      color: #281b00;
+      box-shadow: 0 16px 34px rgba(245,164,0,.38), inset 0 -9px 0 rgba(0,0,0,.09);
+      animation: centerHum 2.8s ease-in-out infinite;
+    }
+
+    @keyframes centerHum {
+      0%, 100% { filter: saturate(1) brightness(1); }
+      50% { filter: saturate(1.12) brightness(1.05); }
+    }
+
+    .tile:active, .tile.hit {
+      transform: translate(-50%, -50%) scale(.92) rotate(-2deg);
+      filter: brightness(1.05);
+    }
+
+    .tile.slide-selected {
+      transform: translate(-50%, -50%) scale(1.07) rotate(3deg);
+      filter: saturate(1.18) brightness(1.08);
+      box-shadow: 0 20px 36px rgba(133, 101, 255, .24), 0 0 0 8px rgba(255, 255, 255, .52), inset 0 -8px 0 rgba(0,0,0,.05);
+    }
+
+    .hive-wrap.sliding .hive-glow {
+      animation-duration: .95s;
+      filter: blur(11px) saturate(1.25);
+    }
+
+    .tile.spark::after {
+      content: "✦";
+      position: absolute;
+      inset-inline-start: 50%;
+      top: 2px;
+      font-size: .45em;
+      color: #ff4fa3;
+      animation: sparkFly .55s ease forwards;
+    }
+
+    @keyframes sparkFly {
+      from { opacity: 1; transform: translate(0, 0) scale(.8); }
+      to { opacity: 0; transform: translate(-30px, -34px) scale(1.5) rotate(40deg); }
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .control-btn {
+      min-width: 94px;
+      min-height: 54px;
+      padding: 12px 17px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.78);
+      box-shadow: var(--soft-shadow), inset 0 -4px 0 rgba(0,0,0,.05);
+      font-weight: 1000;
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    .control-btn.enter {
+      background: linear-gradient(135deg, #ffe25a, #ff9d2e);
+      min-width: 118px;
+    }
+
+    .control-btn.shuffle {
+      min-width: 64px;
+      border-radius: 50%;
+      font-size: 22px;
+    }
+
+    .control-btn:active { transform: scale(.96) translateY(2px); }
+
+    .side-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .side-heading h2, .hint-box h3 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .found-counter {
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    .words-cloud {
+      min-height: 168px;
+      display: flex;
+      align-content: flex-start;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 9px;
+      padding: 12px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.54);
+      overflow: auto;
+      max-height: 270px;
+    }
+
+    .empty-list {
+      color: var(--muted);
+      font-weight: 800;
+      margin: auto;
+      text-align: center;
+    }
+
+    .word-chip {
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,248,211,.95));
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,.05), 0 8px 18px rgba(60,32,90,.10);
+      font-weight: 1000;
+      animation: chipIn .38s cubic-bezier(.2,.8,.15,1.3);
+    }
+
+    .word-chip.golden {
+      background: linear-gradient(135deg, #fff36d, #ffc12e 55%, #ff8e35);
+    }
+
+    @keyframes chipIn {
+      from { opacity: 0; transform: translateY(8px) scale(.84) rotate(2deg); }
+      to { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+    }
+
+    .hint-box {
+      padding: 14px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.54);
+      display: grid;
+      gap: 12px;
+    }
+
+    .hint-actions {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    .hint-grid {
+      display: grid;
+      gap: 8px;
+      max-height: 190px;
+      overflow: auto;
+      padding-inline-end: 2px;
+    }
+
+    .hint-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,.55);
+      border-radius: 14px;
+      padding: 8px 10px;
+      font-weight: 850;
+    }
+
+    .stars {
+      display: flex;
+      gap: 5px;
+      direction: ltr;
+      font-size: 18px;
+    }
+
+    .family-note {
+      color: var(--muted);
+      font-weight: 750;
+      line-height: 1.45;
+      font-size: 14px;
+      padding: 2px 4px 0;
+    }
+
+    .corpus-panel {
+      border-radius: 22px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,.62);
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,.04);
+      display: grid;
+      gap: 6px;
+    }
+
+    .corpus-panel h3 { margin: 0; }
+    .corpus-panel p { margin: 0; font-weight: 900; }
+    .corpus-panel small { color: var(--muted); font-weight: 750; line-height: 1.35; }
+
+    .corpus-dot {
+      width: 15px;
+      height: 15px;
+      border-radius: 999px;
+      display: inline-block;
+      background: #c7c2d1;
+      box-shadow: 0 0 0 5px rgba(199,194,209,.18);
+    }
+
+    .corpus-dot.loading { background: #ffb130; animation: dotBlink .75s ease-in-out infinite alternate; }
+    .corpus-dot.ready { background: #20b970; box-shadow: 0 0 0 5px rgba(32,185,112,.18); }
+    .corpus-dot.cache { background: #52b7ff; box-shadow: 0 0 0 5px rgba(82,183,255,.18); }
+    .corpus-dot.fallback { background: #ff65b1; box-shadow: 0 0 0 5px rgba(255,101,177,.18); }
+
+    @keyframes dotBlink {
+      from { transform: scale(.82); opacity: .65; }
+      to { transform: scale(1.14); opacity: 1; }
+    }
+
+    .toast-wrap {
+      position: fixed;
+      left: 50%;
+      bottom: calc(18px + var(--safe-bottom));
+      transform: translateX(-50%);
+      z-index: 40;
+      display: grid;
+      gap: 8px;
+      width: min(92vw, 560px);
+      pointer-events: none;
+    }
+
+    .toast {
+      justify-self: center;
+      border-radius: 999px;
+      padding: 13px 18px;
+      background: rgba(34, 26, 53, .92);
+      color: #fff;
+      box-shadow: 0 14px 40px rgba(0,0,0,.22);
+      font-weight: 950;
+      animation: toastIn .34s ease, toastOut .38s ease 2.35s forwards;
+      text-align: center;
+    }
+
+    .toast.good { background: rgba(21, 152, 91, .95); }
+    .toast.bad { background: rgba(220, 43, 78, .95); }
+    .toast.gold { background: linear-gradient(135deg, #f59e00, #ff4fa3); }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(16px) scale(.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes toastOut {
+      to { opacity: 0; transform: translateY(10px) scale(.98); }
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(25, 18, 40, .45);
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-backdrop.open { display: grid; }
+
+    .modal {
+      width: min(720px, 100%);
+      max-height: min(86vh, 860px);
+      overflow: auto;
+      border-radius: 30px;
+      background: rgba(255,255,255,.94);
+      box-shadow: 0 28px 80px rgba(0,0,0,.28);
+      padding: clamp(18px, 3vw, 28px);
+      animation: modalIn .24s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(18px) scale(.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .modal h2 {
+      margin: 0;
+      font-size: clamp(25px, 4vw, 36px);
+    }
+
+    .close-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #f2edf7;
+      font-weight: 1000;
+      font-size: 22px;
+    }
+
+    .modal p {
+      color: var(--muted);
+      line-height: 1.55;
+      font-weight: 700;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    .field label {
+      font-weight: 950;
+      color: #3a2c4c;
+    }
+
+    .field input, .field textarea, .field select {
+      width: 100%;
+      border: 2px solid rgba(86, 68, 122, .16);
+      border-radius: 18px;
+      padding: 12px 14px;
+      background: #fff;
+      outline: none;
+      font-weight: 800;
+      color: var(--ink);
+      transition: border .16s ease, box-shadow .16s ease;
+    }
+
+    .field textarea {
+      min-height: 150px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-color: #ffbd2e;
+      box-shadow: 0 0 0 4px rgba(255, 210, 42, .18);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: end;
+      margin-top: 16px;
+    }
+
+    .rules-list {
+      margin: 0;
+      padding-inline-start: 24px;
+      color: var(--muted);
+      font-weight: 750;
+      line-height: 1.65;
+    }
+
+    .settings-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 18px;
+      background: #f8f3ff;
+      margin: 10px 0;
+      font-weight: 850;
+    }
+
+    .switch {
+      width: 62px;
+      height: 36px;
+      border-radius: 999px;
+      background: #ded6e8;
+      padding: 4px;
+      display: flex;
+      justify-content: flex-start;
+      transition: background .2s ease;
+    }
+
+    .switch.on { background: #39d99b; justify-content: flex-end; }
+    .switch span { width: 28px; height: 28px; border-radius: 50%; background: white; box-shadow: 0 5px 15px rgba(0,0,0,.18); }
+
+    canvas#confetti {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;
+    }
+
+    .level-finished {
+      border: 2px solid rgba(255, 190, 44, .65);
+      background: linear-gradient(135deg, rgba(255, 246, 170, .86), rgba(255,255,255,.70));
+    }
+
+    .mini-kbd {
+      display: none;
+      justify-content: center;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .particle {
+      position: fixed;
+      z-index: 35;
+      pointer-events: none;
+      font-weight: 1000;
+      animation: particleUp .8s ease-out forwards;
+    }
+
+    @keyframes particleUp {
+      from { opacity: 1; transform: translate(-50%, -50%) scale(.7) rotate(-6deg); }
+      to { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% - 96px)) scale(1.5) rotate(18deg); }
+    }
+
+    @media (max-width: 920px) {
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .top-actions { justify-content: start; width: 100%; }
+      .layout { grid-template-columns: 1fr; }
+      .game-card, .side-card { min-height: auto; }
+      .side-card { order: 2; }
+      .hive-wrap {
+        height: clamp(310px, min(72vw, 46svh), 480px);
+        max-height: 46svh;
+        margin-block: 6px 12px;
+      }
+      .words-cloud { max-height: 220px; }
+    }
+
+    @media (max-width: 840px) {
+      .topbar { gap: 9px; }
+      .top-actions {
+        justify-content: center;
+        gap: 8px;
+      }
+      .pill-button .hide-small { display: none; }
+      .select-wrap select { min-width: min(230px, 58vw); }
+    }
+
+    @media (display-mode: standalone) and (max-width: 920px) {
+      .app-shell { padding-top: calc(10px + var(--safe-top)); }
+      .topbar { margin-bottom: 8px; }
+    }
+
+    @media (max-height: 820px) and (min-width: 700px) {
+      .layout { align-items: start; }
+      .tagline { display: none; }
+      h1 { font-size: clamp(28px, 4.4vw, 44px); }
+      .logo {
+        width: 50px;
+        height: 50px;
+        border-radius: 18px;
+        font-size: 28px;
+      }
+      .game-card, .side-card {
+        min-height: 0;
+        padding: clamp(14px, 2vw, 22px);
+      }
+      .game-card { padding-bottom: 10px; }
+      .side-card {
+        max-height: calc(100svh - 96px);
+        overflow: auto;
+      }
+      .progress-panel {
+        padding: 10px 12px;
+      }
+      .input-zone {
+        min-height: 58px;
+        margin-block: 4px 2px;
+      }
+      .current-word {
+        min-height: 54px;
+        font-size: clamp(28px, 5vw, 46px);
+      }
+      .current-word.empty {
+        font-size: clamp(18px, 3vw, 27px);
+      }
+      .hive-wrap {
+        width: min(520px, 90vw, 68svh);
+        height: clamp(300px, min(72vw, 44svh), 400px);
+        max-height: 44svh;
+        margin-block: 4px 10px;
+      }
+      .control-btn {
+        min-height: 48px;
+        padding-block: 10px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      :root { --tap: clamp(58px, min(22vw, 10svh), 78px); --radius: 24px; }
+      .app-shell { padding-inline: 10px; }
+      .logo { width: 52px; height: 52px; border-radius: 18px; font-size: 29px; }
+      .top-actions { gap: 7px; }
+      .pill-button, .select-wrap select { min-height: 42px; padding: 9px 13px; }
+      .tagline { display: none; }
+      .game-card { padding: 13px 13px 10px; }
+      .current-word {
+        min-width: 100%;
+        min-height: 56px;
+        padding-inline: 14px;
+        font-size: clamp(30px, 9vw, 44px);
+      }
+      .current-word.empty {
+        font-size: clamp(17px, 4.8vw, 25px);
+      }
+      .hive-wrap {
+        height: min(380px, 52svh);
+        height: clamp(300px, min(86vw, 52svh), 380px);
+        max-height: 52svh;
+      }
+      .controls { gap: 8px; }
+      .control-btn { min-width: 86px; min-height: 50px; border-radius: 18px; padding: 10px 14px; }
+      .control-btn.shuffle { min-width: 56px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .modal-actions { justify-content: stretch; }
+      .modal-actions .pill-button { justify-content: center; flex: 1 1 auto; }
+    }
+
+    @media (max-width: 360px) {
+      .status-row { grid-template-columns: 1fr; }
+      .score-orb { justify-self: center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .001ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sky-candy" aria-hidden="true">
+    <div class="blob one"></div>
+    <div class="blob two"></div>
+    <div class="blob three"></div>
+    <div class="floaties"><span>🐝</span><span>🌈</span><span>🍯</span><span>✨</span></div>
+  </div>
+
+  <canvas id="confetti"></canvas>
+
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">🐝</div>
+        <div>
+          <h1>מאיה</h1>
+          <div class="tagline">כוורת מילים עברית, לילדים עם אצבעות זריזות ודמיון רעב</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="select-wrap">
+          <select id="levelSelect" aria-label="בחירת שלב"></select>
+        </div>
+        <button class="pill-button primary" id="newGameBtn" type="button" aria-label="שלב קיים אקראי">🎲 <span class="hide-small">שלב קיים</span></button>
+        <button class="pill-button good" id="corpusBtn" type="button" aria-label="שלב קורפוס">🧬 <span class="hide-small label-text">שלב קורפוס</span></button>
+        <button class="pill-button pink" id="editorBtn" type="button" aria-label="עורך להורים">🧰 <span class="hide-small">עורך להורים</span></button>
+        <button class="pill-button" id="helpBtn" type="button" aria-label="עזרה">❔</button>
+        <button class="pill-button" id="settingsBtn" type="button" aria-label="הגדרות">⚙️</button>
+      </div>
+    </header>
+
+    <section class="layout">
+      <article class="game-card" id="gameCard">
+        <div class="status-row">
+          <div>
+            <div class="level-title">
+              <strong id="levelName">שלב</strong>
+              <span class="badge" id="levelEmoji">🍯</span>
+              <span class="badge" id="pangramBadge">מילת זהב: 0</span>
+            </div>
+          </div>
+          <div class="score-orb" id="scoreOrb" aria-label="ניקוד"><span id="scoreNum">0</span></div>
+        </div>
+
+        <div class="progress-panel">
+          <div class="progress-line" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+          <div class="progress-meta">
+            <span id="rankText">דרגה: ניצוץ ראשון</span>
+            <span id="foundText">0 מתוך 0 מילים</span>
+          </div>
+        </div>
+
+        <div class="input-zone" aria-live="polite">
+          <div id="currentWord" class="current-word empty">לחצו על אותיות</div>
+        </div>
+
+        <div class="hive-wrap" id="hiveWrap">
+          <div class="hive-glow"></div>
+          <svg class="gesture-layer" id="gestureSvg" aria-hidden="true"><polyline id="gesturePolyline"></polyline></svg>
+          <button class="tile center" data-pos="center" type="button" style="--x:50%;--y:50%" aria-label="האות הזהובה"></button>
+          <button class="tile" data-pos="0" type="button" style="--x:50%;--y:18%"></button>
+          <button class="tile" data-pos="1" type="button" style="--x:28%;--y:35%"></button>
+          <button class="tile" data-pos="2" type="button" style="--x:72%;--y:35%"></button>
+          <button class="tile" data-pos="3" type="button" style="--x:28%;--y:66%"></button>
+          <button class="tile" data-pos="4" type="button" style="--x:72%;--y:66%"></button>
+          <button class="tile" data-pos="5" type="button" style="--x:50%;--y:84%"></button>
+        </div>
+
+        <div class="controls">
+          <button class="control-btn" id="deleteBtn" type="button">מחיקה</button>
+          <button class="control-btn shuffle" id="shuffleBtn" type="button" aria-label="ערבוב אותיות">↻</button>
+          <button class="control-btn enter" id="enterBtn" type="button">קדימה</button>
+        </div>
+        <div class="mini-kbd" aria-hidden="true">אפשר ללחוץ, להקליד, או להחליק אצבע בין האותיות. בהרמת האצבע מאיה בודקת את המילה.</div>
+      </article>
+
+      <aside class="side-card" id="sideCard">
+        <div class="side-heading">
+          <h2>מילים שנמצאו</h2>
+          <div class="found-counter" id="foundCounter">0</div>
+        </div>
+        <div class="words-cloud" id="wordsCloud">
+          <div class="empty-list">עוד אין מילים. הכוורת מחכה לבאזז הראשון.</div>
+        </div>
+
+        <div class="hint-box">
+          <div class="side-heading">
+            <h3>רמזים</h3>
+            <div class="stars" id="starRow" aria-label="כוכבי התקדמות">☆☆☆☆☆</div>
+          </div>
+          <div class="hint-actions">
+            <button class="small-pill" id="hintBtn" type="button">תני רמז ✨</button>
+            <button class="small-pill" id="revealTableBtn" type="button">טבלת אורכים</button>
+          </div>
+          <div class="hint-grid" id="hintGrid" hidden></div>
+        </div>
+
+        <div class="corpus-panel" aria-live="polite">
+          <div class="side-heading">
+            <h3>קורפוס מילים</h3>
+            <span class="corpus-dot loading" id="corpusDot" aria-label="טוען"></span>
+          </div>
+          <p id="corpusStatus">טוענת קורפוס עברי...</p>
+          <small id="corpusMeta">כשיש רשת, מאיה מושכת רשימת מילים גדולה ומייצרת שלבים חדשים לבד.</small>
+        </div>
+
+        <div class="family-note">
+          כל מילה צריכה לכלול את האות הזהובה. מותר להשתמש באותה אות שוב ושוב. כפתור ״שלב קורפוס״ יוצר לוח אקראי מתוך רשימת מילים עברית, וב״עורך להורים״ אפשר להוסיף שלבים משלכם תוך שתי דקות.
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="modal-backdrop" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="helpTitle">איך משחקים?</h2>
+        <button class="close-btn" type="button" data-close="helpModal" aria-label="סגירה">×</button>
+      </div>
+      <p>מאיה היא כוורת מילים עברית קטנה ונוצצת: לוחצים או מחליקים אצבע בין אותיות, בונים מילים, ואוספים דבש מילולי.</p>
+      <ul class="rules-list">
+        <li>המילה חייבת לכלול את האות הצהובה שבמרכז.</li>
+        <li>אפשר להשתמש באותה אות כמה פעמים שרוצים, גם במסלול החלקה שחוזר לאותה משבצת.</li>
+        <li>ברוב השלבים המילים הן באורך 3 אותיות ומעלה.</li>
+        <li>מילה שמשתמשת בכל שבע האותיות היא מילת זהב ומקבלת בונוס.</li>
+        <li>כפתור ״שלב קורפוס״ יוצר שלב אקראי מתוך רשימת מילים עברית גדולה. אם אין רשת, יש מיני קורפוס מקומי לגיבוי.</li>
+        <li>אותיות סופיות עובדות לבד: לחיצה על מ בסוף מילה תוצג כ־ם, נ תהפוך ל־ן וכן הלאה.</li>
+      </ul>
+      <div class="modal-actions">
+        <button class="pill-button primary" type="button" data-close="helpModal">יאללה, דבש</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="settingsTitle">הגדרות</h2>
+        <button class="close-btn" type="button" data-close="settingsModal" aria-label="סגירה">×</button>
+      </div>
+      <div class="settings-row">
+        <span>צלילים קטנים</span>
+        <button class="switch" id="soundSwitch" type="button" aria-label="הפעלת צלילים"><span></span></button>
+      </div>
+      <div class="settings-row">
+        <span>קונפטי בכמות לא סבירה</span>
+        <button class="switch" id="partySwitch" type="button" aria-label="הפעלת קונפטי מוגבר"><span></span></button>
+      </div>
+      <div class="settings-row">
+        <span>מסך מלא</span>
+        <button class="pill-button" id="fullscreenBtn" type="button">פתחו</button>
+      </div>
+      <div class="settings-row">
+        <span>רענון קורפוס מילים</span>
+        <button class="pill-button good" id="corpusRefreshBtn" type="button">טען מחדש</button>
+      </div>
+      <p>ההתקדמות והשלבים שתיצרו נשמרים בדפדפן של המכשיר. הקורפוס הגדול נטען מהרשת ונשמר כמטמון קטן. אין שרת משלנו, אין הרשמה, אין ענן שמציץ מהחלון.</p>
+      <div class="modal-actions">
+        <button class="pill-button" id="resetLevelBtn" type="button">איפוס השלב הנוכחי</button>
+        <button class="pill-button pink" id="resetAllBtn" type="button">איפוס כל ההתקדמות</button>
+        <button class="pill-button primary" type="button" data-close="settingsModal">סגור</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="editorModal" role="dialog" aria-modal="true" aria-labelledby="editorTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="editorTitle">עורך שלבים להורים</h2>
+        <button class="close-btn" type="button" data-close="editorModal" aria-label="סגירה">×</button>
+      </div>
+      <p>בחרו אות מרכזית, שש אותיות מסביב, ורשימת מילים מופרדת ברווחים או בשורות. מאיה תבדוק שהמילים עומדות בכללים ותשמור את השלב במכשיר.</p>
+      <div class="form-grid">
+        <div class="field">
+          <label for="editName">שם השלב</label>
+          <input id="editName" value="שלב של מאיה" />
+        </div>
+        <div class="field">
+          <label for="editEmoji">אימוג׳י</label>
+          <input id="editEmoji" value="🌟" maxlength="4" />
+        </div>
+        <div class="field">
+          <label for="editCenter">אות מרכזית</label>
+          <input id="editCenter" value="מ" maxlength="2" />
+        </div>
+        <div class="field">
+          <label for="editLetters">שש אותיות מסביב</label>
+          <input id="editLetters" value="א י ל ד ה ר" />
+        </div>
+        <div class="field">
+          <label for="editMinLength">אורך מינימלי</label>
+          <select id="editMinLength"><option value="2">2 אותיות</option><option value="3" selected>3 אותיות</option><option value="4">4 אותיות</option></select>
+        </div>
+        <div class="field">
+          <label for="editTheme">צבע מצב רוח</label>
+          <select id="editTheme"><option value="honey">דבש</option><option value="berry">ורוד</option><option value="mint">מנטה</option><option value="sky">שמיים</option></select>
+        </div>
+        <div class="field full">
+          <label for="editWords">מילים לשלב</label>
+          <textarea id="editWords">אמא
+אימא
+מים
+מילה
+מילים
+מידה
+אדמה
+למה
+למד
+מלא
+מראה
+דממה</textarea>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="pill-button" id="tryEditorBtn" type="button">בדיקה מהירה</button>
+        <button class="pill-button primary" id="savePuzzleBtn" type="button">שמור שלב</button>
+        <button class="pill-button pink" id="deleteCustomBtn" type="button">מחק שלבים שלי</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
