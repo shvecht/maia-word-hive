@@ -63,6 +63,10 @@
     }
   ];
 
+  const IMPORTED_SENTENCE_PUZZLES = Array.isArray(window.KEREM_IMPORTED_SENTENCE_PUZZLES)
+    ? window.KEREM_IMPORTED_SENTENCE_PUZZLES
+    : [];
+
   const SENTENCE_PUZZLES = [
     {
       id: 'sentence-dad-strawberry-home',
@@ -147,7 +151,8 @@
       targetWords: ['ילדה','ישנה','בננה','שדה'],
       sentenceTokens: [{ target: 'ילדה' }, { target: 'ישנה' }, { text: 'ליד' }, { target: 'בננה' }, { prefix: 'ב', target: 'שדה' }],
       art: { src: 'assets/sentence-art/girl-banana-field.webp', alt: 'ילדה ישנה ליד בננה בשדה' }
-    }
+    },
+    ...IMPORTED_SENTENCE_PUZZLES
   ];
 
   const FALLBACK_CORPUS_TEXT = `
@@ -530,8 +535,8 @@
   }
 
   function seedFallbackCorpus() {
-    const sentenceTargets = SENTENCE_PUZZLES.flatMap(puzzle => puzzle.targetWords || []);
-    const words = DEFAULT_PUZZLES.flatMap(puzzle => puzzle.words).concat(sentenceTargets, FALLBACK_CORPUS_TEXT.split(/\s+/));
+    const sentenceWords = SENTENCE_PUZZLES.flatMap(puzzle => (puzzle.targetWords || []).concat(puzzle.words || []));
+    const words = DEFAULT_PUZZLES.flatMap(puzzle => puzzle.words).concat(sentenceWords, FALLBACK_CORPUS_TEXT.split(/\s+/));
     setCorpusWords(words, 'fallback', 'מיני קורפוס מקומי', true);
   }
 
